@@ -32,7 +32,7 @@ type databricksRestService struct {
 	limit int
 }
 
-func newDatabricksService(dbc databricksRawClientIntf, limit int) databricksService {
+func newDatabricksService(dbc databricksRawClient, limit int) databricksService {
 	return databricksRestService{
 		dbc:   databricksClient{dbc: dbc},
 		limit: limit,

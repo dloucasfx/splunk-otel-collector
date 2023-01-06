@@ -39,7 +39,7 @@ func NewFactory() receiver.Factory {
 	)
 }
 
-type dbClientFactory func(baseURL string, tok string, httpClient *http.Client, logger *zap.Logger) databricksRawClientIntf
+type dbClientFactory func(baseURL string, tok string, httpClient *http.Client, logger *zap.Logger) databricksRawClient
 
 func newReceiverFactory(dbClientFactory dbClientFactory) receiver.CreateMetricsFunc {
 	return func(
@@ -70,7 +70,7 @@ func newReceiverFactory(dbClientFactory dbClientFactory) receiver.CreateMetricsF
 			dbmp:        dbMetricsProvider{dbsvc: dbsvc},
 			builder:     metadata.NewMetricsBuilder(dbcfg.Metrics, settings.BuildInfo),
 			resourceOpt: metadata.WithDatabricksInstanceName(dbcfg.InstanceName),
-			scmb:        sparkCoreMetricsBuilder{ssvc: ssvc},
+			scmb:        sparkCoreMetricsBuilder{ssvc: ssvc, dbsvc: dbsvc},
 			semb:        sparkMetricsBuilder{ssvc: ssvc},
 		}
 		collectorScraper, err := scraperhelper.NewScraper(typeStr, dbScraper.scrape)

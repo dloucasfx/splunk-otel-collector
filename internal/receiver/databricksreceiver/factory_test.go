@@ -44,7 +44,7 @@ func TestFactory(t *testing.T) {
 
 func TestCreateReceiver(t *testing.T) {
 	ctx := context.Background()
-	f := newReceiverFactory(func(string, string, *http.Client, *zap.Logger) databricksRawClientIntf { return &testdataDBClient{} })
+	f := newReceiverFactory(func(string, string, *http.Client, *zap.Logger) databricksRawClient { return &testdataDBClient{} })
 	receiver, err := f(
 		ctx,
 		otelcolreceiver.CreateSettings{

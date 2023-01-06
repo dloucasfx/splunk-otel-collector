@@ -119,3 +119,7 @@ func (c *fakeCompletedJobRunClient) addCompletedRun(jobID int) {
 func (c *fakeCompletedJobRunClient) runningClusters() ([]cluster, error) {
 	return nil, nil
 }
+
+func (c *fakeCompletedJobRunClient) runningPipelines() ([]pipelineSummary, error) {
+	return nil, nil
+}

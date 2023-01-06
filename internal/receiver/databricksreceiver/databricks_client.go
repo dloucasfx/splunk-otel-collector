@@ -19,11 +19,11 @@ import (
 	"fmt"
 )
 
-// databricksClient wraps a databricksRawClientIntf implementation and unmarshals json byte
+// databricksClient wraps a databricksRawClient implementation and unmarshals json byte
 // arrays to the types defined in json_types.go. Its methods signatures mirror
 // those of the dbc.
 type databricksClient struct {
-	dbc databricksRawClientIntf
+	dbc databricksRawClient
 }
 
 func (c databricksClient) jobsList(limit int, offset int) (jobsList, error) {

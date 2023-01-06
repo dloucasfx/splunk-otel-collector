@@ -28,15 +28,6 @@ import (
 	"github.com/signalfx/splunk-otel-collector/internal/receiver/databricksreceiver/internal/spark"
 )
 
-func TestSparkService(t *testing.T) {
-	ssvc := newTestSparkService()
-	metrics, err := ssvc.getSparkCoreMetricsForClusters()
-	require.NoError(t, err)
-	for _, metric := range metrics {
-		fmt.Printf("->%v<-\n", metric)
-	}
-}
-
 func xTestSparkService_Integration(t *testing.T) {
 	logger := zap.NewNop()
 	dbcl := newDatabricksClient(
@@ -56,10 +47,12 @@ func xTestSparkService_Integration(t *testing.T) {
 		"dapi29cab1150cc2f1eb365120abbb95d8da",
 		newSparkClient,
 	)
-	clusters, err := ssvc.getSparkCoreMetricsForClusters()
+	clusters, err := dbsvc.runningClusters()
 	require.NoError(t, err)
-	for clstr, _ := range clusters {
-		execInfo, err := ssvc.getSparkExecutorInfoSliceByApp(clstr.ClusterId)
+	clusterMetrics, err := ssvc.getSparkCoreMetricsForClusters(clusters)
+	require.NoError(t, err)
+	for clusterMetric, _ := range clusterMetrics {
+		execInfo, err := ssvc.getSparkExecutorInfoSliceByApp(clusterMetric.ClusterId)
 		require.NoError(t, err)
 		fmt.Printf("execInfo: ->%v<-\n", execInfo)
 	}
@@ -68,7 +61,7 @@ func xTestSparkService_Integration(t *testing.T) {
 func newTestSparkService() sparkRestService {
 	return sparkRestService{
 		logger: zap.New(zapcore.NewNopCore()),
-		dbsvc:  newDatabricksService(&testdataDBClient{}, 25),
+		dbsvc:  newTestDatabricksService(),
 		sparkClientFactory: func(*zap.Logger, *http.Client, string, string, int, string, string) spark.Client {
 			return spark.Client{
 				RawClient: testdataSparkClusterClient{},

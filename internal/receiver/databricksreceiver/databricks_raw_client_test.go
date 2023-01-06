@@ -32,7 +32,7 @@ func TestAPIClient(t *testing.T) {
 	h := &handlertest.FakeHandler{}
 	svr := httptest.NewServer(h)
 	defer svr.Close()
-	c := databricksRawClient{
+	c := databricksRawHTTPClient{
 		authClient: httpauth.NewClient(http.DefaultClient, svr.URL, "abc123"),
 		logger:     zap.NewNop(),
 	}
@@ -47,7 +47,11 @@ func TestAPIClient(t *testing.T) {
 	assert.Equal(t, path, h.Reqs[2].RequestURI)
 }
 
-// testdataDBClient implements databricksRawClientIntf but is backed by json files in testdata.
+func newTestDatabricksService() databricksService {
+	return newDatabricksService(&testdataDBClient{}, 25)
+}
+
+// testdataDBClient implements databricksRawClient but is backed by json files in testdata.
 type testdataDBClient struct {
 	i int
 }

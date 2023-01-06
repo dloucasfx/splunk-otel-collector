@@ -32,9 +32,9 @@ const (
 	pipelinePath         = "/api/2.0/pipelines/%s"
 )
 
-// databricksRawClientIntf is extracted from databricksRawClient so that it can be swapped for
+// databricksRawClient is extracted from databricksRawHTTPClient so that it can be swapped for
 // testing.
-type databricksRawClientIntf interface {
+type databricksRawClient interface {
 	jobsList(limit int, offset int) ([]byte, error)
 	activeJobRuns(limit int, offset int) ([]byte, error)
 	completedJobRuns(id int, limit int, offset int) ([]byte, error)
@@ -43,51 +43,51 @@ type databricksRawClientIntf interface {
 	pipeline(string) ([]byte, error)
 }
 
-// databricksRawClient wraps an authClient, encapsulates calls to the databricks API, and
-// implements databricksRawClientIntf. Its methods return byte arrays to be unmarshalled
+// databricksRawHTTPClient wraps an authClient, encapsulates calls to the databricks API, and
+// implements databricksRawClient. Its methods return byte arrays to be unmarshalled
 // by the caller.
-type databricksRawClient struct {
+type databricksRawHTTPClient struct {
 	logger     *zap.Logger
 	authClient httpauth.ClientIntf
 }
 
-func newDatabricksClient(endpoint string, tok string, httpClient *http.Client, logger *zap.Logger) databricksRawClientIntf {
-	return &databricksRawClient{
+func newDatabricksClient(endpoint string, tok string, httpClient *http.Client, logger *zap.Logger) databricksRawClient {
+	return &databricksRawHTTPClient{
 		authClient: httpauth.NewClient(httpClient, endpoint, tok),
 		logger:     logger,
 	}
 }
 
-func (c databricksRawClient) jobsList(limit int, offset int) (out []byte, err error) {
+func (c databricksRawHTTPClient) jobsList(limit int, offset int) (out []byte, err error) {
 	path := fmt.Sprintf(jobsListPath, limit, offset)
-	c.logger.Debug("databricksRawClient.jobsList", zap.String("path", path))
+	c.logger.Debug("databricksRawHTTPClient.jobsList", zap.String("path", path))
 	return c.authClient.Get(path)
 }
 
-func (c databricksRawClient) activeJobRuns(limit int, offset int) ([]byte, error) {
+func (c databricksRawHTTPClient) activeJobRuns(limit int, offset int) ([]byte, error) {
 	path := fmt.Sprintf(activeJobRunsPath, limit, offset)
-	c.logger.Debug("databricksRawClient.activeJobRuns", zap.String("path", path))
+	c.logger.Debug("databricksRawHTTPClient.activeJobRuns", zap.String("path", path))
 	return c.authClient.Get(path)
 }
 
-func (c databricksRawClient) completedJobRuns(jobID int, limit int, offset int) ([]byte, error) {
+func (c databricksRawHTTPClient) completedJobRuns(jobID int, limit int, offset int) ([]byte, error) {
 	path := fmt.Sprintf(completedJobRunsPath, jobID, limit, offset)
-	c.logger.Debug("databricksRawClient.completedJobRuns", zap.String("path", path))
+	c.logger.Debug("databricksRawHTTPClient.completedJobRuns", zap.String("path", path))
 	return c.authClient.Get(path)
 }
 
-func (c databricksRawClient) clustersList() ([]byte, error) {
-	c.logger.Debug("databricksRawClient.clustersList", zap.String("path", clustersListPath))
+func (c databricksRawHTTPClient) clustersList() ([]byte, error) {
+	c.logger.Debug("databricksRawHTTPClient.clustersList", zap.String("path", clustersListPath))
 	return c.authClient.Get(clustersListPath)
 }
 
-func (c databricksRawClient) pipelines() ([]byte, error) {
-	c.logger.Debug("databricksRawClient.pipelines", zap.String("path", pipelinesPath))
+func (c databricksRawHTTPClient) pipelines() ([]byte, error) {
+	c.logger.Debug("databricksRawHTTPClient.pipelines", zap.String("path", pipelinesPath))
 	return c.authClient.Get(pipelinesPath)
 }
 
-func (c databricksRawClient) pipeline(s string) ([]byte, error) {
+func (c databricksRawHTTPClient) pipeline(s string) ([]byte, error) {
 	path := fmt.Sprintf(pipelinePath, s)
-	c.logger.Debug("databricksRawClient.pipeline", zap.String("path", path))
+	c.logger.Debug("databricksRawHTTPClient.pipeline", zap.String("path", path))
 	return c.authClient.Get(path)
 }

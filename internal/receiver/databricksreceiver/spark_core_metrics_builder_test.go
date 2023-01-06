@@ -30,7 +30,10 @@ func TestStripSparkMetricKey(t *testing.T) {
 }
 
 func TestSparkMetricsBuilder_GeneratedMetrics(t *testing.T) {
-	mp := sparkCoreMetricsBuilder{newTestSparkService()}
+	mp := sparkCoreMetricsBuilder{
+		ssvc:  newTestSparkService(),
+		dbsvc: newTestDatabricksService(),
+	}
 	builder := newTestMetricsBuilder()
 	_, _, err := mp.buildCoreMetrics(builder, 0)
 	require.NoError(t, err)
@@ -175,7 +178,10 @@ func assertIntSumEq(t *testing.T, metricMap map[string]pmetric.Metric, metricNam
 }
 
 func TestSparkMetricsBuilder_Histograms(t *testing.T) {
-	mp := sparkCoreMetricsBuilder{newTestSparkService()}
+	mp := sparkCoreMetricsBuilder{
+		ssvc:  newTestSparkService(),
+		dbsvc: newTestDatabricksService(),
+	}
 	builder := newTestMetricsBuilder()
 	histoMetrics, _, err := mp.buildCoreMetrics(builder, 0)
 	require.NoError(t, err)

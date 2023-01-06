@@ -26,7 +26,7 @@ import (
 )
 
 func TestMetricsProvider_Scrape(t *testing.T) {
-	dbsvc := newDatabricksService(&testdataDBClient{}, 25)
+	dbsvc := newTestDatabricksService()
 	ssvc := newTestSparkService()
 	scrpr := scraper{
 		logger:      zap.NewNop(),
@@ -37,7 +37,8 @@ func TestMetricsProvider_Scrape(t *testing.T) {
 			dbsvc: dbsvc,
 		},
 		scmb: sparkCoreMetricsBuilder{
-			ssvc: ssvc,
+			ssvc:  ssvc,
+			dbsvc: dbsvc,
 		},
 		semb: sparkMetricsBuilder{
 			ssvc: ssvc,
