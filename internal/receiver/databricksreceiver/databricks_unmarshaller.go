@@ -65,3 +65,23 @@ func (u databricksUnmarshaller) clusterList() (clusterList, error) {
 	err = json.Unmarshal(bytes, &out)
 	return out, err
 }
+
+func (u databricksUnmarshaller) pipelines() (pipelinesInfo, error) {
+	bytes, err := u.dbc.pipelines()
+	out := pipelinesInfo{}
+	if err != nil {
+		return out, fmt.Errorf("databricksUnmarshaller.pipelines(): %w", err)
+	}
+	err = json.Unmarshal(bytes, &out)
+	return out, err
+}
+
+func (u databricksUnmarshaller) pipeline(id string) (pipelineInfo, error) {
+	bytes, err := u.dbc.pipeline(id)
+	out := pipelineInfo{}
+	if err != nil {
+		return out, fmt.Errorf("databricksUnmarshaller.pipeline(): %w", err)
+	}
+	err = json.Unmarshal(bytes, &out)
+	return out, err
+}

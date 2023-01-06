@@ -73,3 +73,13 @@ func (c *testdataDBClient) completedJobRuns(jobID int, limit int, offset int) ([
 func (c *testdataDBClient) clustersList() ([]byte, error) {
 	return os.ReadFile("testdata/clusters-list.json")
 }
+
+func (c *testdataDBClient) pipelines() ([]byte, error) {
+	// TODO implement me
+	panic("implement me")
+}
+
+func (c *testdataDBClient) pipeline(s string) ([]byte, error) {
+	// TODO implement me
+	panic("implement me")
+}

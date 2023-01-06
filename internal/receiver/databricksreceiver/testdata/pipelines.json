@@ -1,0 +1,18 @@
+{
+  "statuses": [
+    {
+      "pipeline_id": "869e34da-5d67-4793-8f29-b391dd2f14e8",
+      "state": "RUNNING",
+      "name": "my-pipeline",
+      "latest_updates": [
+        {
+          "update_id": "303d9085-590c-4dc3-82ad-c35244504408",
+          "state": "WAITING_FOR_RESOURCES",
+          "creation_time": "2023-01-05T00:20:52.266Z"
+        }
+      ],
+      "creator_user_name": "pablocollins@azuresignalfx.onmicrosoft.com",
+      "run_as_user_name": "pablocollins@azuresignalfx.onmicrosoft.com"
+    }
+  ]
+}

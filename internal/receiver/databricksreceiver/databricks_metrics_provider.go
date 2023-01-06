@@ -28,21 +28,21 @@ type dbMetricsProvider struct {
 	dbsvc databricksServiceIntf
 }
 
-func (p dbMetricsProvider) addJobStatusMetrics(builder *metadata.MetricsBuilder, ts pcommon.Timestamp) ([]int, error) {
+func (p dbMetricsProvider) addJobStatusMetrics(builder *metadata.MetricsBuilder, now pcommon.Timestamp) ([]int, error) {
 	jobs, err := p.dbsvc.jobs()
 	if err != nil {
 		return nil, fmt.Errorf("dbMetricsProvider.addJobStatusMetrics(): %w", err)
 	}
-	builder.RecordDatabricksJobsTotalDataPoint(ts, int64(len(jobs)))
+	builder.RecordDatabricksJobsTotalDataPoint(now, int64(len(jobs)))
 
 	var jobIDs []int
 	for _, j := range jobs {
 		jobIDs = append(jobIDs, j.JobID)
 		pauseStatus := pauseStatusToInt(j.Settings.Schedule.PauseStatus)
-		builder.RecordDatabricksJobsScheduleStatusDataPoint(ts, pauseStatus, int64(j.JobID))
+		builder.RecordDatabricksJobsScheduleStatusDataPoint(now, pauseStatus, int64(j.JobID))
 		for _, task := range j.Settings.Tasks {
 			builder.RecordDatabricksTasksScheduleStatusDataPoint(
-				ts,
+				now,
 				pauseStatus,
 				int64(j.JobID),
 				task.TaskKey,
@@ -51,6 +51,15 @@ func (p dbMetricsProvider) addJobStatusMetrics(builder *metadata.MetricsBuilder,
 		}
 	}
 	return jobIDs, nil
+}
+
+func (p dbMetricsProvider) addNumActiveRunsMetric(builder *metadata.MetricsBuilder, now pcommon.Timestamp) error {
+	runs, err := p.dbsvc.activeJobRuns()
+	if err != nil {
+		return fmt.Errorf("dbMetricsProvider.addNumActiveJobsMetric(): %w", err)
+	}
+	builder.RecordDatabricksJobsActiveTotalDataPoint(now, int64(len(runs)))
+	return nil
 }
 
 func taskType(task jobTask) metadata.AttributeTaskType {
@@ -69,15 +78,6 @@ func taskType(task jobTask) metadata.AttributeTaskType {
 		return metadata.AttributeTaskTypeSparkSubmitTask
 	}
 	return 0
-}
-
-func (p dbMetricsProvider) addNumActiveRunsMetric(builder *metadata.MetricsBuilder, ts pcommon.Timestamp) error {
-	runs, err := p.dbsvc.activeJobRuns()
-	if err != nil {
-		return fmt.Errorf("dbMetricsProvider.addNumActiveJobsMetric(): %w", err)
-	}
-	builder.RecordDatabricksJobsActiveTotalDataPoint(ts, int64(len(runs)))
-	return nil
 }
 
 func pauseStatusToInt(ps string) int64 {

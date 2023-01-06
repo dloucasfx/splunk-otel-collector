@@ -22,6 +22,7 @@ type databricksServiceIntf interface {
 	activeJobRuns() ([]jobRun, error)
 	completedJobRuns(int, int64) ([]jobRun, error)
 	runningClusters() ([]cluster, error)
+	runningPipelines() ([]pipelineSummary, error)
 }
 
 // databricksService handles pagination (responses specify hasMore=true/false) and
@@ -94,6 +95,39 @@ func (s databricksService) runningClusters() ([]cluster, error) {
 			continue
 		}
 		out = append(out, c)
+	}
+	return out, nil
+}
+
+type pipelineSummary struct {
+	id        string
+	name      string
+	clusterID string
+}
+
+func (s databricksService) runningPipelines() ([]pipelineSummary, error) {
+	pipelines, err := s.unmarshaller.pipelines()
+	if err != nil {
+		return nil, fmt.Errorf("databricksService.runningPipelines(): %w", err)
+	}
+	var out []pipelineSummary
+	for _, status := range pipelines.Statuses {
+		if status.State != "RUNNING" {
+			continue
+		}
+		pipeline, err := s.unmarshaller.pipeline(status.PipelineId)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"databricksService.runningPipelines(): failed to get pipeline info: pipeline id: %s: %w",
+				status.PipelineId,
+				err,
+			)
+		}
+		out = append(out, pipelineSummary{
+			id:        status.PipelineId,
+			name:      status.Name,
+			clusterID: pipeline.ClusterId,
+		})
 	}
 	return out, nil
 }

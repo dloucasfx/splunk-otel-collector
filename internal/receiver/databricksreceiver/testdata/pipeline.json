@@ -1,0 +1,43 @@
+{
+  "pipeline_id": "869e34da-5d67-4793-8f29-b391dd2f14e8",
+  "spec": {
+    "id": "869e34da-5d67-4793-8f29-b391dd2f14e8",
+    "name": "my-pipeline",
+    "storage": "dbfs:/pipelines/869e34da-5d67-4793-8f29-b391dd2f14e8",
+    "clusters": [
+      {
+        "label": "default",
+        "autoscale": {
+          "min_workers": 1,
+          "max_workers": 5,
+          "mode": "ENHANCED"
+        }
+      }
+    ],
+    "libraries": [
+      {
+        "notebook": {
+          "path": "/Users/pablocollins@azuresignalfx.onmicrosoft.com/Delta Live Tables quickstart (Python)"
+        }
+      }
+    ],
+    "continuous": false,
+    "development": true,
+    "photon": false,
+    "edition": "ADVANCED",
+    "channel": "CURRENT"
+  },
+  "state": "RUNNING",
+  "cluster_id": "0105-002052-5uql3rzd",
+  "name": "my-pipeline",
+  "creator_user_name": "pablocollins@azuresignalfx.onmicrosoft.com",
+  "latest_updates": [
+    {
+      "update_id": "303d9085-590c-4dc3-82ad-c35244504408",
+      "state": "WAITING_FOR_RESOURCES",
+      "creation_time": "2023-01-05T00:20:52.266Z"
+    }
+  ],
+  "last_modified": 1672878043634,
+  "run_as_user_name": "pablocollins@azuresignalfx.onmicrosoft.com"
+}

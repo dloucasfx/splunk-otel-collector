@@ -28,6 +28,8 @@ const (
 	activeJobRunsPath    = "/api/2.1/jobs/runs/list?active_only=true&limit=%d&offset=%d"
 	completedJobRunsPath = "/api/2.1/jobs/runs/list?completed_only=true&expand_tasks=true&job_id=%d&limit=%d&offset=%d"
 	clustersListPath     = "/api/2.0/clusters/list"
+	pipelinesPath        = "/api/2.0/pipelines"
+	pipelinePath         = "/api/2.0/pipelines/%s"
 )
 
 // databricksClientIntf is extracted from databricksClient so that it can be swapped for
@@ -37,6 +39,8 @@ type databricksClientIntf interface {
 	activeJobRuns(limit int, offset int) ([]byte, error)
 	completedJobRuns(id int, limit int, offset int) ([]byte, error)
 	clustersList() ([]byte, error)
+	pipelines() ([]byte, error)
+	pipeline(string) ([]byte, error)
 }
 
 // databricksClient wraps an authClient, encapsulates calls to the databricks API, and
@@ -75,4 +79,15 @@ func (c databricksClient) completedJobRuns(jobID int, limit int, offset int) ([]
 func (c databricksClient) clustersList() ([]byte, error) {
 	c.logger.Debug("databricksClient.clustersList", zap.String("path", clustersListPath))
 	return c.authClient.Get(clustersListPath)
+}
+
+func (c databricksClient) pipelines() ([]byte, error) {
+	c.logger.Debug("databricksClient.pipelines", zap.String("path", pipelinesPath))
+	return c.authClient.Get(pipelinesPath)
+}
+
+func (c databricksClient) pipeline(s string) ([]byte, error) {
+	path := fmt.Sprintf(pipelinePath, s)
+	c.logger.Debug("databricksClient.pipeline", zap.String("path", path))
+	return c.authClient.Get(path)
 }

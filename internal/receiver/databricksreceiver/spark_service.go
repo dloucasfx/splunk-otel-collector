@@ -52,7 +52,7 @@ func newSparkService(
 	sparkUIPort int,
 	orgID string,
 	tok string,
-	factory sparkUnmarshalerFactory,
+	sparkFactory sparkUnmarshalerFactory,
 ) sparkService {
 	return sparkService{
 		logger:             logger,
@@ -62,7 +62,7 @@ func newSparkService(
 		sparkUIPort:        sparkUIPort,
 		orgID:              orgID,
 		tok:                tok,
-		unmarshalerFactory: factory,
+		unmarshalerFactory: sparkFactory,
 	}
 }
 
