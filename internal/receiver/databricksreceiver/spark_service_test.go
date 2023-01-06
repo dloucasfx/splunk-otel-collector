@@ -30,7 +30,7 @@ import (
 
 func TestSparkService(t *testing.T) {
 	ssvc := newTestSparkService()
-	metrics, err := ssvc.getSparkCoreMetricsForAllClusters()
+	metrics, err := ssvc.getSparkCoreMetricsForClusters()
 	require.NoError(t, err)
 	for _, metric := range metrics {
 		fmt.Printf("->%v<-\n", metric)
@@ -56,7 +56,7 @@ func xTestSparkService_Integration(t *testing.T) {
 		"dapi29cab1150cc2f1eb365120abbb95d8da",
 		newSparkClient,
 	)
-	clusters, err := ssvc.getSparkCoreMetricsForAllClusters()
+	clusters, err := ssvc.getSparkCoreMetricsForClusters()
 	require.NoError(t, err)
 	for clstr, _ := range clusters {
 		execInfo, err := ssvc.getSparkExecutorInfoSliceByApp(clstr.ClusterId)
@@ -65,8 +65,8 @@ func xTestSparkService_Integration(t *testing.T) {
 	}
 }
 
-func newTestSparkService() sparkService {
-	return sparkService{
+func newTestSparkService() sparkRestService {
+	return sparkRestService{
 		logger: zap.New(zapcore.NewNopCore()),
 		dbsvc:  newDatabricksService(&testdataDBClient{}, 25),
 		sparkClientFactory: func(*zap.Logger, *http.Client, string, string, int, string, string) spark.Client {

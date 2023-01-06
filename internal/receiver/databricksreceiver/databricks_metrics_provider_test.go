@@ -27,7 +27,7 @@ import (
 
 func TestMetricsProvider(t *testing.T) {
 	const ignored = 25
-	var dbClient databricksServiceIntf = newDatabricksService(&testdataDBClient{}, ignored)
+	var dbClient databricksService = newDatabricksService(&testdataDBClient{}, ignored)
 	mp := dbMetricsProvider{dbsvc: dbClient}
 
 	builder := newTestMetricsBuilder()

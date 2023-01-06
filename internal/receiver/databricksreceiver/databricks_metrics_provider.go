@@ -22,10 +22,10 @@ import (
 	"github.com/signalfx/splunk-otel-collector/internal/receiver/databricksreceiver/internal/metadata"
 )
 
-// dbMetricsProvider wraps a databricksServiceIntf and provides metrics for databricks
+// dbMetricsProvider wraps a databricksService and provides metrics for databricks
 // endpoints.
 type dbMetricsProvider struct {
-	dbsvc databricksServiceIntf
+	dbsvc databricksService
 }
 
 func (p dbMetricsProvider) addJobStatusMetrics(builder *metadata.MetricsBuilder, now pcommon.Timestamp) ([]int, error) {

@@ -23,7 +23,7 @@ import (
 )
 
 type sparkMetricsBuilder struct {
-	ssvc sparkService
+	ssvc sparkRestService
 }
 
 func (b sparkMetricsBuilder) buildExecutorMetrics(builder *metadata.MetricsBuilder, now pcommon.Timestamp, clusterIDs []string) error {

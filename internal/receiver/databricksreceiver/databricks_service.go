@@ -16,8 +16,8 @@ package databricksreceiver
 
 import "fmt"
 
-// databricksServiceIntf is extracted from databricksService for swapping out in unit tests
-type databricksServiceIntf interface {
+// databricksService is extracted from databricksRestService for swapping out in unit tests
+type databricksService interface {
 	jobs() ([]job, error)
 	activeJobRuns() ([]jobRun, error)
 	completedJobRuns(int, int64) ([]jobRun, error)
@@ -25,26 +25,26 @@ type databricksServiceIntf interface {
 	runningPipelines() ([]pipelineSummary, error)
 }
 
-// databricksService handles pagination (responses specify hasMore=true/false) and
+// databricksRestService handles pagination (responses specify hasMore=true/false) and
 // combines the returned objects into one array.
-type databricksService struct {
+type databricksRestService struct {
 	dbc   databricksClient
 	limit int
 }
 
 func newDatabricksService(dbc databricksRawClientIntf, limit int) databricksService {
-	return databricksService{
+	return databricksRestService{
 		dbc:   databricksClient{dbc: dbc},
 		limit: limit,
 	}
 }
 
-func (s databricksService) jobs() (out []job, err error) {
+func (s databricksRestService) jobs() (out []job, err error) {
 	hasMore := true
 	for i := 0; hasMore; i++ {
 		resp, err := s.dbc.jobsList(s.limit, s.limit*i)
 		if err != nil {
-			return nil, fmt.Errorf("databricksService.jobs(): %w", err)
+			return nil, fmt.Errorf("databricksRestService.jobs(): %w", err)
 		}
 		out = append(out, resp.Jobs...)
 		hasMore = resp.HasMore
@@ -52,12 +52,12 @@ func (s databricksService) jobs() (out []job, err error) {
 	return out, nil
 }
 
-func (s databricksService) activeJobRuns() (out []jobRun, err error) {
+func (s databricksRestService) activeJobRuns() (out []jobRun, err error) {
 	hasMore := true
 	for i := 0; hasMore; i++ {
 		resp, err := s.dbc.activeJobRuns(s.limit, s.limit*i)
 		if err != nil {
-			return nil, fmt.Errorf("databricksService.activeJobRuns(): %w", err)
+			return nil, fmt.Errorf("databricksRestService.activeJobRuns(): %w", err)
 		}
 		out = append(out, resp.Runs...)
 		hasMore = resp.HasMore
@@ -65,12 +65,12 @@ func (s databricksService) activeJobRuns() (out []jobRun, err error) {
 	return out, nil
 }
 
-func (s databricksService) completedJobRuns(jobID int, prevStartTime int64) (out []jobRun, err error) {
+func (s databricksRestService) completedJobRuns(jobID int, prevStartTime int64) (out []jobRun, err error) {
 	hasMore := true
 	for i := 0; hasMore; i++ {
 		resp, err := s.dbc.completedJobRuns(jobID, s.limit, s.limit*i)
 		if err != nil {
-			return nil, fmt.Errorf("databricksService.completedJobRuns(): %w", err)
+			return nil, fmt.Errorf("databricksRestService.completedJobRuns(): %w", err)
 		}
 		out = append(out, resp.Runs...)
 		if prevStartTime == 0 || resp.Runs == nil || resp.Runs[len(resp.Runs)-1].StartTime < prevStartTime {
@@ -84,10 +84,10 @@ func (s databricksService) completedJobRuns(jobID int, prevStartTime int64) (out
 	return out, nil
 }
 
-func (s databricksService) runningClusters() ([]cluster, error) {
+func (s databricksRestService) runningClusters() ([]cluster, error) {
 	cl, err := s.dbc.clusterList()
 	if err != nil {
-		return nil, fmt.Errorf("databricksService.runningClusterIDs(): %w", err)
+		return nil, fmt.Errorf("databricksRestService.runningClusterIDs(): %w", err)
 	}
 	var out []cluster
 	for _, c := range cl.Clusters {
@@ -105,10 +105,10 @@ type pipelineSummary struct {
 	clusterID string
 }
 
-func (s databricksService) runningPipelines() ([]pipelineSummary, error) {
+func (s databricksRestService) runningPipelines() ([]pipelineSummary, error) {
 	pipelines, err := s.dbc.pipelines()
 	if err != nil {
-		return nil, fmt.Errorf("databricksService.runningPipelines(): %w", err)
+		return nil, fmt.Errorf("databricksRestService.runningPipelines(): %w", err)
 	}
 	var out []pipelineSummary
 	for _, status := range pipelines.Statuses {
@@ -118,7 +118,7 @@ func (s databricksService) runningPipelines() ([]pipelineSummary, error) {
 		pipeline, err := s.dbc.pipeline(status.PipelineId)
 		if err != nil {
 			return nil, fmt.Errorf(
-				"databricksService.runningPipelines(): failed to get pipeline info: pipeline id: %s: %w",
+				"databricksRestService.runningPipelines(): failed to get pipeline info: pipeline id: %s: %w",
 				status.PipelineId,
 				err,
 			)

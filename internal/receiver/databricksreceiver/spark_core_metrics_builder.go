@@ -26,11 +26,16 @@ import (
 )
 
 type sparkCoreMetricsBuilder struct {
-	ssvc sparkService
+	dbsvc databricksService
+	ssvc  sparkService
 }
 
 func (b sparkCoreMetricsBuilder) buildCoreMetrics(builder *metadata.MetricsBuilder, now pcommon.Timestamp) ([]pmetric.Metric, []string, error) {
-	coreClusterMetrics, err := b.ssvc.getSparkCoreMetricsForAllClusters()
+	clusters, err := b.dbsvc.runningClusters()
+	if err != nil {
+		return nil, nil, fmt.Errorf("error getting cluster IDs: %w", err)
+	}
+	coreClusterMetrics, err := b.ssvc.getSparkCoreMetricsForClusters(clusters)
 	if err != nil {
 		return nil, nil, fmt.Errorf("error getting spark metrics for all clusters: %w", err)
 	}

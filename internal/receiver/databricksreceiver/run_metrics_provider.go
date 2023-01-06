@@ -26,10 +26,10 @@ import (
 // runTracker to extract just the new runs returned from the API.
 type runMetricsProvider struct {
 	tracker  *runTracker
-	dbClient databricksServiceIntf
+	dbClient databricksService
 }
 
-func newRunMetricsProvider(dbClient databricksServiceIntf) runMetricsProvider {
+func newRunMetricsProvider(dbClient databricksService) runMetricsProvider {
 	return runMetricsProvider{
 		tracker:  newRunTracker(),
 		dbClient: dbClient,
