@@ -31,10 +31,10 @@ type sparkService struct {
 	sparkUIPort        int
 	orgID              string
 	tok                string
-	unmarshalerFactory sparkUnmarshalerFactory
+	sparkClientFactory sparkClientFactory
 }
 
-type sparkUnmarshalerFactory func(
+type sparkClientFactory func(
 	logger *zap.Logger,
 	httpClient *http.Client,
 	sparkProxyURL string,
@@ -42,7 +42,7 @@ type sparkUnmarshalerFactory func(
 	port int,
 	token string,
 	clusterID string,
-) spark.Unmarshaler
+) spark.Client
 
 func newSparkService(
 	logger *zap.Logger,
@@ -52,7 +52,7 @@ func newSparkService(
 	sparkUIPort int,
 	orgID string,
 	tok string,
-	sparkFactory sparkUnmarshalerFactory,
+	sparkFactory sparkClientFactory,
 ) sparkService {
 	return sparkService{
 		logger:             logger,
@@ -62,7 +62,7 @@ func newSparkService(
 		sparkUIPort:        sparkUIPort,
 		orgID:              orgID,
 		tok:                tok,
-		unmarshalerFactory: sparkFactory,
+		sparkClientFactory: sparkFactory,
 	}
 }
 
@@ -83,12 +83,12 @@ func (s sparkService) getSparkCoreMetricsForAllClusters() (map[cluster]spark.Clu
 }
 
 func (s sparkService) getSparkCoreMetricsForCluster(clusterID string) (spark.ClusterMetrics, error) {
-	return s.newUnmarshaler(clusterID).Metrics()
+	return s.newClient(clusterID).Metrics()
 }
 
 func (s sparkService) getSparkExecutorInfoSliceByApp(clusterID string) (map[spark.Application][]spark.ExecutorInfo, error) {
 	out := map[spark.Application][]spark.ExecutorInfo{}
-	unm := s.newUnmarshaler(clusterID)
+	unm := s.newClient(clusterID)
 	apps, err := unm.Applications()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get applications from spark: %w", err)
@@ -105,7 +105,7 @@ func (s sparkService) getSparkExecutorInfoSliceByApp(clusterID string) (map[spar
 
 func (s sparkService) getSparkJobInfoSliceByApp(clusterID string) (map[spark.Application][]spark.JobInfo, error) {
 	out := map[spark.Application][]spark.JobInfo{}
-	unm := s.newUnmarshaler(clusterID)
+	unm := s.newClient(clusterID)
 	apps, err := unm.Applications()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get applications from spark: %w", err)
@@ -122,7 +122,7 @@ func (s sparkService) getSparkJobInfoSliceByApp(clusterID string) (map[spark.App
 
 func (s sparkService) getSparkStageInfoSliceByApp(clusterID string) (map[spark.Application][]spark.StageInfo, error) {
 	out := map[spark.Application][]spark.StageInfo{}
-	unm := s.newUnmarshaler(clusterID)
+	unm := s.newClient(clusterID)
 	apps, err := unm.Applications()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get applications from spark: %w", err)
@@ -137,6 +137,6 @@ func (s sparkService) getSparkStageInfoSliceByApp(clusterID string) (map[spark.A
 	return out, nil
 }
 
-func (s sparkService) newUnmarshaler(clusterID string) spark.Unmarshaler {
-	return s.unmarshalerFactory(s.logger, s.httpClient, s.sparkAPIEndpoint, s.orgID, s.sparkUIPort, s.tok, clusterID)
+func (s sparkService) newClient(clusterID string) spark.Client {
+	return s.sparkClientFactory(s.logger, s.httpClient, s.sparkAPIEndpoint, s.orgID, s.sparkUIPort, s.tok, clusterID)
 }

@@ -39,7 +39,7 @@ func NewFactory() receiver.Factory {
 	)
 }
 
-type dbClientFactory func(baseURL string, tok string, httpClient *http.Client, logger *zap.Logger) databricksClientIntf
+type dbClientFactory func(baseURL string, tok string, httpClient *http.Client, logger *zap.Logger) databricksRawClientIntf
 
 func newReceiverFactory(dbClientFactory dbClientFactory) receiver.CreateMetricsFunc {
 	return func(
@@ -62,7 +62,7 @@ func newReceiverFactory(dbClientFactory dbClientFactory) receiver.CreateMetricsF
 			dbcfg.SparkUIPort,
 			dbcfg.OrgID,
 			dbcfg.Token,
-			newSparkUnmarshaler,
+			newSparkClient,
 		)
 		dbScraper := scraper{
 			logger:      settings.Logger,
@@ -86,8 +86,8 @@ func newReceiverFactory(dbClientFactory dbClientFactory) receiver.CreateMetricsF
 	}
 }
 
-func newSparkUnmarshaler(logger *zap.Logger, httpClient *http.Client, sparkProxyURL string, orgID string, port int, token string, clusterID string) spark.Unmarshaler {
-	return spark.NewUnmarshaler(httpClient, dbSparkProxyURL(sparkProxyURL, orgID, clusterID, port), token)
+func newSparkClient(logger *zap.Logger, httpClient *http.Client, sparkProxyURL string, orgID string, port int, token string, clusterID string) spark.Client {
+	return spark.NewClient(httpClient, dbSparkProxyURL(sparkProxyURL, orgID, clusterID, port), token)
 }
 
 func dbSparkProxyURL(sparkProxyURL string, orgID string, clusterID string, port int) string {

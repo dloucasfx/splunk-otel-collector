@@ -15,79 +15,73 @@
 package databricksreceiver
 
 import (
+	"encoding/json"
 	"fmt"
-	"net/http"
-
-	"go.uber.org/zap"
-
-	"github.com/signalfx/splunk-otel-collector/internal/receiver/databricksreceiver/internal/httpauth"
 )
 
-const (
-	jobsListPath         = "/api/2.1/jobs/list?expand_tasks=true&limit=%d&offset=%d"
-	activeJobRunsPath    = "/api/2.1/jobs/runs/list?active_only=true&limit=%d&offset=%d"
-	completedJobRunsPath = "/api/2.1/jobs/runs/list?completed_only=true&expand_tasks=true&job_id=%d&limit=%d&offset=%d"
-	clustersListPath     = "/api/2.0/clusters/list"
-	pipelinesPath        = "/api/2.0/pipelines"
-	pipelinePath         = "/api/2.0/pipelines/%s"
-)
-
-// databricksClientIntf is extracted from databricksClient so that it can be swapped for
-// testing.
-type databricksClientIntf interface {
-	jobsList(limit int, offset int) ([]byte, error)
-	activeJobRuns(limit int, offset int) ([]byte, error)
-	completedJobRuns(id int, limit int, offset int) ([]byte, error)
-	clustersList() ([]byte, error)
-	pipelines() ([]byte, error)
-	pipeline(string) ([]byte, error)
-}
-
-// databricksClient wraps an authClient, encapsulates calls to the databricks API, and
-// implements databricksClientIntf. Its methods return byte arrays to be unmarshalled
-// by the caller.
+// databricksClient wraps a databricksRawClientIntf implementation and unmarshals json byte
+// arrays to the types defined in json_types.go. Its methods signatures mirror
+// those of the dbc.
 type databricksClient struct {
-	logger     *zap.Logger
-	authClient httpauth.ClientIntf
+	dbc databricksRawClientIntf
 }
 
-func newDatabricksClient(endpoint string, tok string, httpClient *http.Client, logger *zap.Logger) databricksClientIntf {
-	return &databricksClient{
-		authClient: httpauth.NewClient(httpClient, endpoint, tok),
-		logger:     logger,
+func (c databricksClient) jobsList(limit int, offset int) (jobsList, error) {
+	bytes, err := c.dbc.jobsList(limit, offset)
+	out := jobsList{}
+	if err != nil {
+		return out, fmt.Errorf("databricksClient.jobsList(): %w", err)
 	}
+	err = json.Unmarshal(bytes, &out)
+	return out, err
 }
 
-func (c databricksClient) jobsList(limit int, offset int) (out []byte, err error) {
-	path := fmt.Sprintf(jobsListPath, limit, offset)
-	c.logger.Debug("databricksClient.jobsList", zap.String("path", path))
-	return c.authClient.Get(path)
+func (c databricksClient) activeJobRuns(limit int, offset int) (jobRuns, error) {
+	bytes, err := c.dbc.activeJobRuns(limit, offset)
+	out := jobRuns{}
+	if err != nil {
+		return out, fmt.Errorf("databricksClient.activeJobRuns(): %w", err)
+	}
+	err = json.Unmarshal(bytes, &out)
+	return out, err
 }
 
-func (c databricksClient) activeJobRuns(limit int, offset int) ([]byte, error) {
-	path := fmt.Sprintf(activeJobRunsPath, limit, offset)
-	c.logger.Debug("databricksClient.activeJobRuns", zap.String("path", path))
-	return c.authClient.Get(path)
+func (c databricksClient) completedJobRuns(jobID int, limit int, offset int) (jobRuns, error) {
+	bytes, err := c.dbc.completedJobRuns(jobID, limit, offset)
+	out := jobRuns{}
+	if err != nil {
+		return out, fmt.Errorf("databricksClient.completedJobRuns(): %w", err)
+	}
+	err = json.Unmarshal(bytes, &out)
+	return out, err
 }
 
-func (c databricksClient) completedJobRuns(jobID int, limit int, offset int) ([]byte, error) {
-	path := fmt.Sprintf(completedJobRunsPath, jobID, limit, offset)
-	c.logger.Debug("databricksClient.completedJobRuns", zap.String("path", path))
-	return c.authClient.Get(path)
+func (c databricksClient) clusterList() (clusterList, error) {
+	bytes, err := c.dbc.clustersList()
+	out := clusterList{}
+	if err != nil {
+		return out, fmt.Errorf("databricksClient.clusterList(): %w", err)
+	}
+	err = json.Unmarshal(bytes, &out)
+	return out, err
 }
 
-func (c databricksClient) clustersList() ([]byte, error) {
-	c.logger.Debug("databricksClient.clustersList", zap.String("path", clustersListPath))
-	return c.authClient.Get(clustersListPath)
+func (c databricksClient) pipelines() (pipelinesInfo, error) {
+	bytes, err := c.dbc.pipelines()
+	out := pipelinesInfo{}
+	if err != nil {
+		return out, fmt.Errorf("databricksClient.pipelines(): %w", err)
+	}
+	err = json.Unmarshal(bytes, &out)
+	return out, err
 }
 
-func (c databricksClient) pipelines() ([]byte, error) {
-	c.logger.Debug("databricksClient.pipelines", zap.String("path", pipelinesPath))
-	return c.authClient.Get(pipelinesPath)
-}
-
-func (c databricksClient) pipeline(s string) ([]byte, error) {
-	path := fmt.Sprintf(pipelinePath, s)
-	c.logger.Debug("databricksClient.pipeline", zap.String("path", path))
-	return c.authClient.Get(path)
+func (c databricksClient) pipeline(id string) (pipelineInfo, error) {
+	bytes, err := c.dbc.pipeline(id)
+	out := pipelineInfo{}
+	if err != nil {
+		return out, fmt.Errorf("databricksClient.pipeline(): %w", err)
+	}
+	err = json.Unmarshal(bytes, &out)
+	return out, err
 }

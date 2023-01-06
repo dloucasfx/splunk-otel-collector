@@ -15,47 +15,86 @@
 package spark
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/signalfx/splunk-otel-collector/internal/receiver/databricksreceiver/internal/httpauth"
 )
 
-const (
-	metricsPath         = "/metrics/json"
-	applicationsPath    = "/api/v1/applications"
-	appExecutorsPathFmt = applicationsPath + "/%s/executors"
-	appJobsPathFmt      = applicationsPath + "/%s/jobs"
-	appStagesPathFmt    = applicationsPath + "/%s/stages"
-)
-
-type ClientIntf interface {
-	Metrics() ([]byte, error)
-	Applications() ([]byte, error)
-	AppExecutors(string) ([]byte, error)
-	AppJobs(string) ([]byte, error)
-	AppStages(string) ([]byte, error)
+type Client struct {
+	RawClient RawClientIntf
 }
 
-type client struct {
-	authClient httpauth.ClientIntf
+func NewClient(httpClient *http.Client, endpoint string, tok string) Client {
+	return Client{
+		RawClient: rawClient{
+			authClient: httpauth.NewClient(httpClient, endpoint, tok),
+		},
+	}
 }
 
-func (c client) Metrics() ([]byte, error) {
-	return c.authClient.Get(metricsPath)
+func (c Client) Metrics() (ClusterMetrics, error) {
+	cm := ClusterMetrics{}
+	bytes, err := c.RawClient.Metrics()
+	if err != nil {
+		return cm, fmt.Errorf("failed to get metrics from spark: %w", err)
+	}
+	err = json.Unmarshal(bytes, &cm)
+	if err != nil {
+		return cm, fmt.Errorf("failed to unmarshal spark metrics: %w", err)
+	}
+	return cm, nil
 }
 
-func (c client) Applications() ([]byte, error) {
-	return c.authClient.Get(applicationsPath)
+func (c Client) Applications() ([]Application, error) {
+	var apps []Application
+	bytes, err := c.RawClient.Applications()
+	if err != nil {
+		return apps, fmt.Errorf("failed to get applications from spark: %w", err)
+	}
+	err = json.Unmarshal(bytes, &apps)
+	if err != nil {
+		return apps, fmt.Errorf("failed to unmarshal spark applications: %w", err)
+	}
+	return apps, nil
 }
 
-func (c client) AppExecutors(appID string) ([]byte, error) {
-	return c.authClient.Get(fmt.Sprintf(appExecutorsPathFmt, appID))
+func (c Client) AppExecutors(appID string) ([]ExecutorInfo, error) {
+	bytes, err := c.RawClient.AppExecutors(appID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get app executors from spark: %w", err)
+	}
+	var ei []ExecutorInfo
+	err = json.Unmarshal(bytes, &ei)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal executor info: %w", err)
+	}
+	return ei, nil
 }
 
-func (c client) AppJobs(appID string) ([]byte, error) {
-	return c.authClient.Get(fmt.Sprintf(appJobsPathFmt, appID))
+func (c Client) AppJobs(appID string) ([]JobInfo, error) {
+	bytes, err := c.RawClient.AppJobs(appID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get jobs from spark: %w", err)
+	}
+	var jobs []JobInfo
+	err = json.Unmarshal(bytes, &jobs)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal job info: %w", err)
+	}
+	return jobs, nil
 }
 
-func (c client) AppStages(appID string) ([]byte, error) {
-	return c.authClient.Get(fmt.Sprintf(appStagesPathFmt, appID))
+func (c Client) AppStages(appID string) ([]StageInfo, error) {
+	bytes, err := c.RawClient.AppStages(appID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get jobs from spark: %w", err)
+	}
+	var stages []StageInfo
+	err = json.Unmarshal(bytes, &stages)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal job info: %w", err)
+	}
+	return stages, nil
 }

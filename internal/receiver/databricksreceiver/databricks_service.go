@@ -28,21 +28,21 @@ type databricksServiceIntf interface {
 // databricksService handles pagination (responses specify hasMore=true/false) and
 // combines the returned objects into one array.
 type databricksService struct {
-	unmarshaller databricksUnmarshaller
-	limit        int
+	dbc   databricksClient
+	limit int
 }
 
-func newDatabricksService(dbc databricksClientIntf, limit int) databricksService {
+func newDatabricksService(dbc databricksRawClientIntf, limit int) databricksService {
 	return databricksService{
-		unmarshaller: databricksUnmarshaller{dbc: dbc},
-		limit:        limit,
+		dbc:   databricksClient{dbc: dbc},
+		limit: limit,
 	}
 }
 
 func (s databricksService) jobs() (out []job, err error) {
 	hasMore := true
 	for i := 0; hasMore; i++ {
-		resp, err := s.unmarshaller.jobsList(s.limit, s.limit*i)
+		resp, err := s.dbc.jobsList(s.limit, s.limit*i)
 		if err != nil {
 			return nil, fmt.Errorf("databricksService.jobs(): %w", err)
 		}
@@ -55,7 +55,7 @@ func (s databricksService) jobs() (out []job, err error) {
 func (s databricksService) activeJobRuns() (out []jobRun, err error) {
 	hasMore := true
 	for i := 0; hasMore; i++ {
-		resp, err := s.unmarshaller.activeJobRuns(s.limit, s.limit*i)
+		resp, err := s.dbc.activeJobRuns(s.limit, s.limit*i)
 		if err != nil {
 			return nil, fmt.Errorf("databricksService.activeJobRuns(): %w", err)
 		}
@@ -68,7 +68,7 @@ func (s databricksService) activeJobRuns() (out []jobRun, err error) {
 func (s databricksService) completedJobRuns(jobID int, prevStartTime int64) (out []jobRun, err error) {
 	hasMore := true
 	for i := 0; hasMore; i++ {
-		resp, err := s.unmarshaller.completedJobRuns(jobID, s.limit, s.limit*i)
+		resp, err := s.dbc.completedJobRuns(jobID, s.limit, s.limit*i)
 		if err != nil {
 			return nil, fmt.Errorf("databricksService.completedJobRuns(): %w", err)
 		}
@@ -85,7 +85,7 @@ func (s databricksService) completedJobRuns(jobID int, prevStartTime int64) (out
 }
 
 func (s databricksService) runningClusters() ([]cluster, error) {
-	cl, err := s.unmarshaller.clusterList()
+	cl, err := s.dbc.clusterList()
 	if err != nil {
 		return nil, fmt.Errorf("databricksService.runningClusterIDs(): %w", err)
 	}
@@ -106,7 +106,7 @@ type pipelineSummary struct {
 }
 
 func (s databricksService) runningPipelines() ([]pipelineSummary, error) {
-	pipelines, err := s.unmarshaller.pipelines()
+	pipelines, err := s.dbc.pipelines()
 	if err != nil {
 		return nil, fmt.Errorf("databricksService.runningPipelines(): %w", err)
 	}
@@ -115,7 +115,7 @@ func (s databricksService) runningPipelines() ([]pipelineSummary, error) {
 		if status.State != "RUNNING" {
 			continue
 		}
-		pipeline, err := s.unmarshaller.pipeline(status.PipelineId)
+		pipeline, err := s.dbc.pipeline(status.PipelineId)
 		if err != nil {
 			return nil, fmt.Errorf(
 				"databricksService.runningPipelines(): failed to get pipeline info: pipeline id: %s: %w",

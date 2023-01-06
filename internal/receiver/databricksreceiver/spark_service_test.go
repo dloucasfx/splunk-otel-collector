@@ -54,7 +54,7 @@ func xTestSparkService_Integration(t *testing.T) {
 		40001,
 		"4429673989716691",
 		"dapi29cab1150cc2f1eb365120abbb95d8da",
-		newSparkUnmarshaler,
+		newSparkClient,
 	)
 	clusters, err := ssvc.getSparkCoreMetricsForAllClusters()
 	require.NoError(t, err)
@@ -69,9 +69,9 @@ func newTestSparkService() sparkService {
 	return sparkService{
 		logger: zap.New(zapcore.NewNopCore()),
 		dbsvc:  newDatabricksService(&testdataDBClient{}, 25),
-		unmarshalerFactory: func(*zap.Logger, *http.Client, string, string, int, string, string) spark.Unmarshaler {
-			return spark.Unmarshaler{
-				Client: testdataSparkClusterClient{},
+		sparkClientFactory: func(*zap.Logger, *http.Client, string, string, int, string, string) spark.Client {
+			return spark.Client{
+				RawClient: testdataSparkClusterClient{},
 			}
 		},
 	}
