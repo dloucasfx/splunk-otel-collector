@@ -34,7 +34,7 @@ func TestSparkMetricsBuilder_GeneratedMetrics(t *testing.T) {
 		ssvc: newTestSparkService(),
 	}
 	builder := newTestMetricsBuilder()
-	_, err := mp.buildMetrics(builder, 0, []cluster{{}})
+	_, err := mp.buildMetrics(builder, 0, []cluster{{}}, nil)
 	require.NoError(t, err)
 	emitted := builder.Emit()
 	ms := emitted.ResourceMetrics().At(0).ScopeMetrics().At(0).Metrics()
@@ -181,7 +181,7 @@ func TestSparkMetricsBuilder_Histograms(t *testing.T) {
 		ssvc: newTestSparkService(),
 	}
 	builder := newTestMetricsBuilder()
-	histoMetrics, err := mp.buildMetrics(builder, 0, []cluster{{}})
+	histoMetrics, err := mp.buildMetrics(builder, 0, []cluster{{}}, nil)
 	require.NoError(t, err)
 	ms := pmetric.NewMetricSlice()
 	for _, metric := range histoMetrics {

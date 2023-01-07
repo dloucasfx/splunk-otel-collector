@@ -29,17 +29,26 @@ type sparkClusterMetricsBuilder struct {
 	ssvc sparkService
 }
 
-func (b sparkClusterMetricsBuilder) buildMetrics(builder *metadata.MetricsBuilder, now pcommon.Timestamp, clusters []cluster) ([]pmetric.Metric, error) {
+func (b sparkClusterMetricsBuilder) buildMetrics(builder *metadata.MetricsBuilder, now pcommon.Timestamp, clusters []cluster, pipelines []pipelineSummary) ([]pmetric.Metric, error) {
 	clusterMetrics, err := b.ssvc.getSparkMetricsForClusters(clusters)
 	if err != nil {
 		return nil, fmt.Errorf("error getting spark metrics for all clusters: %w", err)
 	}
+
+	pipelinesByClusterID := map[string]*pipelineSummary{}
+	for _, pipeline := range pipelines {
+		pipelinesByClusterID[pipeline.clusterID] = &pipeline
+	}
+
 	var histoMetrics []pmetric.Metric
 	for clstr, clusterMetric := range clusterMetrics {
-		clusterID := clstr.ClusterId
-		b.buildMetricsForCluster(builder, clusterMetric, now, clusterID)
+		pipeline := pipelinesByClusterID[clstr.ClusterId]
+		if pipeline != nil {
+			fmt.Printf("found pipeline %s for cluster id!\n", pipeline)
+		}
+		b.buildMetricsForCluster(builder, clusterMetric, now, clstr.ClusterId)
 		b.buildClusterTimers(builder, clusterMetric, now, clstr.ClusterName)
-		otelHistos := b.sparkClusterHistosToOtelHistos(clusterMetric, now, clusterID)
+		otelHistos := b.sparkClusterHistosToOtelHistos(clusterMetric, now, clstr.ClusterId)
 		histoMetrics = append(histoMetrics, otelHistos...)
 	}
 	return histoMetrics, nil

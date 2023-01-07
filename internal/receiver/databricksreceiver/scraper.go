@@ -64,10 +64,14 @@ func (s scraper) scrape(_ context.Context) (pmetric.Metrics, error) {
 	if err != nil {
 		return pmetric.Metrics{}, fmt.Errorf("scrape: failed to get running clusters: %w", err)
 	}
-
 	s.logger.Debug("found clusters", zap.Any("clusters", clusters))
 
-	histoMetrics, err := s.scmb.buildMetrics(s.builder, now, clusters)
+	pipelines, err := s.dbsvc.runningPipelines()
+	if err != nil {
+		return pmetric.Metrics{}, fmt.Errorf("scrape: failed to get pipelines: %w", err)
+	}
+
+	histoMetrics, err := s.scmb.buildMetrics(s.builder, now, clusters, pipelines)
 	if err != nil {
 		return pmetric.Metrics{}, fmt.Errorf("scrape: error building spark metrics: %w", err)
 	}

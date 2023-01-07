@@ -79,11 +79,9 @@ func (c *testdataDBClient) clustersList() ([]byte, error) {
 }
 
 func (c *testdataDBClient) pipelines() ([]byte, error) {
-	// TODO implement me
-	panic("implement me")
+	return nil, nil
 }
 
 func (c *testdataDBClient) pipeline(s string) ([]byte, error) {
-	// TODO implement me
-	panic("implement me")
+	return nil, nil
 }

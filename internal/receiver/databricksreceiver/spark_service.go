@@ -42,31 +42,6 @@ type sparkRestService struct {
 	sparkClientFactory sparkClientFactory
 }
 
-func (s sparkRestService) activeJobRuns() ([]jobRun, error) {
-	// TODO implement me
-	panic("implement me")
-}
-
-func (s sparkRestService) completedJobRuns(i int, i2 int64) ([]jobRun, error) {
-	// TODO implement me
-	panic("implement me")
-}
-
-func (s sparkRestService) runningClusters() ([]cluster, error) {
-	// TODO implement me
-	panic("implement me")
-}
-
-func (s sparkRestService) runningPipelines() ([]pipelineSummary, error) {
-	// TODO implement me
-	panic("implement me")
-}
-
-func (s sparkRestService) jobs() ([]job, error) {
-	// TODO implement me
-	panic("implement me")
-}
-
 type sparkClientFactory func(
 	logger *zap.Logger,
 	httpClient *http.Client,
