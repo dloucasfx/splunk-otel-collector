@@ -70,8 +70,9 @@ func newReceiverFactory(dbClientFactory dbClientFactory) receiver.CreateMetricsF
 			dbmp:        dbMetricsProvider{dbsvc: dbsvc},
 			builder:     metadata.NewMetricsBuilder(dbcfg.Metrics, settings.BuildInfo),
 			resourceOpt: metadata.WithDatabricksInstanceName(dbcfg.InstanceName),
-			scmb:        sparkCoreMetricsBuilder{ssvc: ssvc, dbsvc: dbsvc},
-			semb:        sparkMetricsBuilder{ssvc: ssvc},
+			scmb:        sparkClusterMetricsBuilder{ssvc: ssvc},
+			semb:        sparkExtraMetricsBuilder{ssvc: ssvc},
+			dbsvc:       dbsvc,
 		}
 		collectorScraper, err := scraperhelper.NewScraper(typeStr, dbScraper.scrape)
 		if err != nil {

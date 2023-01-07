@@ -24,8 +24,8 @@ import (
 )
 
 type sparkService interface {
-	getSparkCoreMetricsForClusters(clusters []cluster) (map[cluster]spark.ClusterMetrics, error)
-	getSparkCoreMetricsForCluster(clusterID string) (spark.ClusterMetrics, error)
+	getSparkMetricsForClusters(clusters []cluster) (map[cluster]spark.ClusterMetrics, error)
+	getSparkMetricsForCluster(clusterID string) (spark.ClusterMetrics, error)
 	getSparkExecutorInfoSliceByApp(clusterID string) (map[spark.Application][]spark.ExecutorInfo, error)
 	getSparkJobInfoSliceByApp(clusterID string) (map[spark.Application][]spark.JobInfo, error)
 	getSparkStageInfoSliceByApp(clusterID string) (map[spark.Application][]spark.StageInfo, error)
@@ -99,10 +99,10 @@ func newSparkService(
 	}
 }
 
-func (s sparkRestService) getSparkCoreMetricsForClusters(clusters []cluster) (map[cluster]spark.ClusterMetrics, error) {
+func (s sparkRestService) getSparkMetricsForClusters(clusters []cluster) (map[cluster]spark.ClusterMetrics, error) {
 	out := map[cluster]spark.ClusterMetrics{}
 	for _, clstr := range clusters {
-		metrics, err := s.getSparkCoreMetricsForCluster(clstr.ClusterId)
+		metrics, err := s.getSparkMetricsForCluster(clstr.ClusterId)
 		if err != nil {
 			return nil, fmt.Errorf("error getting spark metrics for cluster: %s: %w", clstr, err)
 		}
@@ -111,7 +111,7 @@ func (s sparkRestService) getSparkCoreMetricsForClusters(clusters []cluster) (ma
 	return out, nil
 }
 
-func (s sparkRestService) getSparkCoreMetricsForCluster(clusterID string) (spark.ClusterMetrics, error) {
+func (s sparkRestService) getSparkMetricsForCluster(clusterID string) (spark.ClusterMetrics, error) {
 	return s.newClient(clusterID).Metrics()
 }
 

@@ -21,9 +21,9 @@ import (
 )
 
 func TestSparkMetricsBuilder_Executors(t *testing.T) {
-	semb := sparkMetricsBuilder{newTestSparkService()}
+	semb := sparkExtraMetricsBuilder{newTestSparkService()}
 	builder := newTestMetricsBuilder()
-	err := semb.buildExecutorMetrics(builder, 0, []string{"aaa-111"})
+	err := semb.buildExecutorMetrics(builder, 0, []cluster{{}})
 	require.NoError(t, err)
 	emitted := builder.Emit()
 	ms := emitted.ResourceMetrics().At(0).ScopeMetrics().At(0).Metrics()
@@ -37,9 +37,9 @@ func TestSparkMetricsBuilder_Executors(t *testing.T) {
 }
 
 func TestSparkMetricsBuilder_Jobs(t *testing.T) {
-	semb := sparkMetricsBuilder{newTestSparkService()}
+	semb := sparkExtraMetricsBuilder{newTestSparkService()}
 	builder := newTestMetricsBuilder()
-	err := semb.buildJobMetrics(builder, 0, []string{"aaa-111"})
+	err := semb.buildJobMetrics(builder, 0, []cluster{{}})
 	require.NoError(t, err)
 	emitted := builder.Emit()
 	ms := emitted.ResourceMetrics().At(0).ScopeMetrics().At(0).Metrics()
@@ -56,9 +56,9 @@ func TestSparkMetricsBuilder_Jobs(t *testing.T) {
 }
 
 func TestSparkMetricsBuilder_Stages(t *testing.T) {
-	semb := sparkMetricsBuilder{newTestSparkService()}
+	semb := sparkExtraMetricsBuilder{newTestSparkService()}
 	builder := newTestMetricsBuilder()
-	err := semb.buildStageMetrics(builder, 0, []string{"aaa-111"})
+	err := semb.buildStageMetrics(builder, 0, []cluster{{}})
 	require.NoError(t, err)
 	emitted := builder.Emit()
 	ms := emitted.ResourceMetrics().At(0).ScopeMetrics().At(0).Metrics()

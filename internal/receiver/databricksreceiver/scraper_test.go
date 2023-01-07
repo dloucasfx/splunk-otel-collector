@@ -36,17 +36,17 @@ func TestMetricsProvider_Scrape(t *testing.T) {
 		dbmp: dbMetricsProvider{
 			dbsvc: dbsvc,
 		},
-		scmb: sparkCoreMetricsBuilder{
-			ssvc:  ssvc,
-			dbsvc: dbsvc,
-		},
-		semb: sparkMetricsBuilder{
+		scmb: sparkClusterMetricsBuilder{
 			ssvc: ssvc,
 		},
+		semb: sparkExtraMetricsBuilder{
+			ssvc: ssvc,
+		},
+		dbsvc: dbsvc,
 	}
 	metrics, err := scrpr.scrape(context.Background())
 	require.NoError(t, err)
-	assert.Equal(t, 122, metrics.MetricCount())
+	assert.Equal(t, 138, metrics.MetricCount())
 	rms := metrics.ResourceMetrics().At(0)
 	attrs := rms.Resource().Attributes()
 	v, _ := attrs.Get("databricks.instance.name")

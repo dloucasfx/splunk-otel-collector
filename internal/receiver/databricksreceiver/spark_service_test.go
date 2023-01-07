@@ -49,7 +49,7 @@ func xTestSparkService_Integration(t *testing.T) {
 	)
 	clusters, err := dbsvc.runningClusters()
 	require.NoError(t, err)
-	clusterMetrics, err := ssvc.getSparkCoreMetricsForClusters(clusters)
+	clusterMetrics, err := ssvc.getSparkMetricsForClusters(clusters)
 	require.NoError(t, err)
 	for clusterMetric, _ := range clusterMetrics {
 		execInfo, err := ssvc.getSparkExecutorInfoSliceByApp(clusterMetric.ClusterId)

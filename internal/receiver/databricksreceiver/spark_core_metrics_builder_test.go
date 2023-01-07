@@ -30,12 +30,11 @@ func TestStripSparkMetricKey(t *testing.T) {
 }
 
 func TestSparkMetricsBuilder_GeneratedMetrics(t *testing.T) {
-	mp := sparkCoreMetricsBuilder{
-		ssvc:  newTestSparkService(),
-		dbsvc: newTestDatabricksService(),
+	mp := sparkClusterMetricsBuilder{
+		ssvc: newTestSparkService(),
 	}
 	builder := newTestMetricsBuilder()
-	_, _, err := mp.buildCoreMetrics(builder, 0)
+	_, err := mp.buildMetrics(builder, 0, []cluster{{}})
 	require.NoError(t, err)
 	emitted := builder.Emit()
 	ms := emitted.ResourceMetrics().At(0).ScopeMetrics().At(0).Metrics()
@@ -178,12 +177,11 @@ func assertIntSumEq(t *testing.T, metricMap map[string]pmetric.Metric, metricNam
 }
 
 func TestSparkMetricsBuilder_Histograms(t *testing.T) {
-	mp := sparkCoreMetricsBuilder{
-		ssvc:  newTestSparkService(),
-		dbsvc: newTestDatabricksService(),
+	mp := sparkClusterMetricsBuilder{
+		ssvc: newTestSparkService(),
 	}
 	builder := newTestMetricsBuilder()
-	histoMetrics, _, err := mp.buildCoreMetrics(builder, 0)
+	histoMetrics, err := mp.buildMetrics(builder, 0, []cluster{{}})
 	require.NoError(t, err)
 	ms := pmetric.NewMetricSlice()
 	for _, metric := range histoMetrics {

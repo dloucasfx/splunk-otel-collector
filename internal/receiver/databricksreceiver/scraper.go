@@ -35,8 +35,9 @@ type scraper struct {
 	dbmp        dbMetricsProvider
 	builder     *metadata.MetricsBuilder
 	resourceOpt metadata.ResourceMetricsOption
-	scmb        sparkCoreMetricsBuilder
-	semb        sparkMetricsBuilder
+	scmb        sparkClusterMetricsBuilder
+	semb        sparkExtraMetricsBuilder
+	dbsvc       databricksService
 }
 
 func (s scraper) scrape(_ context.Context) (pmetric.Metrics, error) {
@@ -59,16 +60,31 @@ func (s scraper) scrape(_ context.Context) (pmetric.Metrics, error) {
 		return pmetric.Metrics{}, fmt.Errorf("scrape: error adding multi job run metrics: %w", err)
 	}
 
-	histoMetrics, clusterIDs, err := s.scmb.buildCoreMetrics(s.builder, now)
+	clusters, err := s.dbsvc.runningClusters()
 	if err != nil {
-		return pmetric.Metrics{}, fmt.Errorf("scrape: error building core spark metrics: %w", err)
+		return pmetric.Metrics{}, fmt.Errorf("scrape: failed to get running clusters: %w", err)
 	}
 
-	s.logger.Debug("found clusters", zap.Strings("cluster-ids", clusterIDs))
+	s.logger.Debug("found clusters", zap.Any("clusters", clusters))
 
-	err = s.semb.buildExecutorMetrics(s.builder, now, clusterIDs)
+	histoMetrics, err := s.scmb.buildMetrics(s.builder, now, clusters)
 	if err != nil {
-		return pmetric.Metrics{}, fmt.Errorf("scraper.scrape(): %w", err)
+		return pmetric.Metrics{}, fmt.Errorf("scrape: error building spark metrics: %w", err)
+	}
+
+	err = s.semb.buildExecutorMetrics(s.builder, now, clusters)
+	if err != nil {
+		return pmetric.Metrics{}, fmt.Errorf("scrape: failed to build executor metrics: %w", err)
+	}
+
+	err = s.semb.buildJobMetrics(s.builder, now, clusters)
+	if err != nil {
+		return pmetric.Metrics{}, fmt.Errorf("scrape: failed to build job metrics: %w", err)
+	}
+
+	err = s.semb.buildStageMetrics(s.builder, now, clusters)
+	if err != nil {
+		return pmetric.Metrics{}, fmt.Errorf("scrape: failed to build stage metrics: %w", err)
 	}
 
 	out := s.builder.Emit(s.resourceOpt)

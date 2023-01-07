@@ -25,34 +25,27 @@ import (
 	"github.com/signalfx/splunk-otel-collector/internal/receiver/databricksreceiver/internal/spark"
 )
 
-type sparkCoreMetricsBuilder struct {
-	dbsvc databricksService
-	ssvc  sparkService
+type sparkClusterMetricsBuilder struct {
+	ssvc sparkService
 }
 
-func (b sparkCoreMetricsBuilder) buildCoreMetrics(builder *metadata.MetricsBuilder, now pcommon.Timestamp) ([]pmetric.Metric, []string, error) {
-	clusters, err := b.dbsvc.runningClusters()
+func (b sparkClusterMetricsBuilder) buildMetrics(builder *metadata.MetricsBuilder, now pcommon.Timestamp, clusters []cluster) ([]pmetric.Metric, error) {
+	clusterMetrics, err := b.ssvc.getSparkMetricsForClusters(clusters)
 	if err != nil {
-		return nil, nil, fmt.Errorf("error getting cluster IDs: %w", err)
-	}
-	coreClusterMetrics, err := b.ssvc.getSparkCoreMetricsForClusters(clusters)
-	if err != nil {
-		return nil, nil, fmt.Errorf("error getting spark metrics for all clusters: %w", err)
+		return nil, fmt.Errorf("error getting spark metrics for all clusters: %w", err)
 	}
 	var histoMetrics []pmetric.Metric
-	var clusterIDs []string
-	for clstr, clusterMetric := range coreClusterMetrics {
+	for clstr, clusterMetric := range clusterMetrics {
 		clusterID := clstr.ClusterId
-		clusterIDs = append(clusterIDs, clusterID)
-		b.buildClusterMetrics(builder, clusterMetric, now, clusterID)
+		b.buildMetricsForCluster(builder, clusterMetric, now, clusterID)
 		b.buildClusterTimers(builder, clusterMetric, now, clstr.ClusterName)
 		otelHistos := b.sparkClusterHistosToOtelHistos(clusterMetric, now, clusterID)
 		histoMetrics = append(histoMetrics, otelHistos...)
 	}
-	return histoMetrics, clusterIDs, nil
+	return histoMetrics, nil
 }
 
-func (b sparkCoreMetricsBuilder) buildClusterMetrics(
+func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 	builder *metadata.MetricsBuilder,
 	m spark.ClusterMetrics,
 	now pcommon.Timestamp,
@@ -672,7 +665,7 @@ func (b sparkCoreMetricsBuilder) buildClusterMetrics(
 	}
 }
 
-func (b sparkCoreMetricsBuilder) sparkClusterHistosToOtelHistos(
+func (b sparkClusterMetricsBuilder) sparkClusterHistosToOtelHistos(
 	m spark.ClusterMetrics,
 	now pcommon.Timestamp,
 	clusterID string,
@@ -685,7 +678,7 @@ func (b sparkCoreMetricsBuilder) sparkClusterHistosToOtelHistos(
 	return histoMetrics
 }
 
-func (b sparkCoreMetricsBuilder) buildClusterTimers(
+func (b sparkClusterMetricsBuilder) buildClusterTimers(
 	builder *metadata.MetricsBuilder,
 	m spark.ClusterMetrics,
 	now pcommon.Timestamp,
