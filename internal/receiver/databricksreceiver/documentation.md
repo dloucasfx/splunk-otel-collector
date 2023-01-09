@@ -12,87 +12,87 @@ These are the metrics available for this scraper.
 | **databricks.jobs.run.duration** | The execution duration in milliseconds per completed job | ms | Gauge(Int) | <ul> <li>job_id</li> </ul> |
 | **databricks.jobs.schedule.status** | A snapshot of the pause/run status per job taken at each scrape 0=PAUSED, 1=UNPAUSED, 2=NOT_SCHEDULED | {status} | Gauge(Int) | <ul> <li>job_id</li> </ul> |
 | **databricks.jobs.total** | A snapshot of the total number of jobs registered in the Databricks instance taken at each scrape | {jobs} | Gauge(Int) | <ul> </ul> |
-| **databricks.spark.blockmanager.memory.diskspaceused** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.blockmanager.memory.maxmem** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.blockmanager.memory.maxoffheapmem** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.blockmanager.memory.maxonheapmem** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.blockmanager.memory.memused** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.blockmanager.memory.offheapmemused** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.blockmanager.memory.onheapmemused** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.blockmanager.memory.remainingmem** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.blockmanager.memory.remainingoffheapmem** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.blockmanager.memory.remainingonheapmem** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.dagscheduler.job.activejobs** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.dagscheduler.job.alljobs** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.dagscheduler.stage.failedstages** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.dagscheduler.stage.runningstages** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.dagscheduler.stage.waitingstages** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.autovacuumcount** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.deletedfilesfiltered** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.filterlistingcount** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.jobcommitcompleted** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.markerreaderrors** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.markerrefreshcount** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.markerrefresherrors** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.markersread** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.repeatedlistcount** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.uncommittedfilesfiltered** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.untrackedfilesfound** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.vacuumcount** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.directorycommit.vacuumerrors** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.preemption.numchecks** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.preemption.numpoolsautoexpired** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.preemption.numtaskspreempted** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.preemption.poolstarvationmillis** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.preemption.scheduleroverheadnanos** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.preemption.tasktimewastedmillis** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.activepools** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.bypasslaneactivepools** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.fastlaneactivepools** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.finishedqueriestotaltasktimens** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.lanecleanup.markedpools** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.lanecleanup.twophasepoolscleaned** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.lanecleanup.zombiepoolscleaned** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.preemption.slottransfernumsuccessfulpreemptioniterations** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.preemption.slottransfernumtaskspreempted** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.preemption.slottransferwastedtasktimens** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.slotreservation.numgradualdecrease** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.slotreservation.numquickdrop** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.slotreservation.numquickjump** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.slotreservation.slotsreserved** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.slowlaneactivepools** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.databricks.taskschedulinglanes.totalquerygroupsfinished** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
+| **databricks.spark.blockmanager.memory.diskspaceused** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.blockmanager.memory.maxmem** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.blockmanager.memory.maxoffheapmem** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.blockmanager.memory.maxonheapmem** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.blockmanager.memory.memused** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.blockmanager.memory.offheapmemused** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.blockmanager.memory.onheapmemused** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.blockmanager.memory.remainingmem** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.blockmanager.memory.remainingoffheapmem** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.blockmanager.memory.remainingonheapmem** | n/a | mb | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.dagscheduler.job.activejobs** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.dagscheduler.job.alljobs** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.dagscheduler.stage.failedstages** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.dagscheduler.stage.runningstages** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.dagscheduler.stage.waitingstages** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.autovacuumcount** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.deletedfilesfiltered** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.filterlistingcount** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.jobcommitcompleted** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.markerreaderrors** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.markerrefreshcount** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.markerrefresherrors** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.markersread** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.repeatedlistcount** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.uncommittedfilesfiltered** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.untrackedfilesfound** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.vacuumcount** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.directorycommit.vacuumerrors** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.preemption.numchecks** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.preemption.numpoolsautoexpired** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.preemption.numtaskspreempted** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.preemption.poolstarvationmillis** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.preemption.scheduleroverheadnanos** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.preemption.tasktimewastedmillis** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.activepools** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.bypasslaneactivepools** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.fastlaneactivepools** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.finishedqueriestotaltasktimens** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.lanecleanup.markedpools** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.lanecleanup.twophasepoolscleaned** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.lanecleanup.zombiepoolscleaned** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.preemption.slottransfernumsuccessfulpreemptioniterations** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.preemption.slottransfernumtaskspreempted** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.preemption.slottransferwastedtasktimens** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.slotreservation.numgradualdecrease** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.slotreservation.numquickdrop** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.slotreservation.numquickjump** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.slotreservation.slotsreserved** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.slowlaneactivepools** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.databricks.taskschedulinglanes.totalquerygroupsfinished** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
 | **databricks.spark.executor.disk_used** | n/a | By | Gauge(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>executor_id</li> </ul> |
 | **databricks.spark.executor.max_memory** | n/a | By | Gauge(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>executor_id</li> </ul> |
 | **databricks.spark.executor.memory_used** | n/a | By | Gauge(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>executor_id</li> </ul> |
 | **databricks.spark.executor.total_input_bytes** | n/a | By | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>executor_id</li> </ul> |
 | **databricks.spark.executor.total_shuffle_read** | n/a | By | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>executor_id</li> </ul> |
 | **databricks.spark.executor.total_shuffle_write** | n/a | By | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>executor_id</li> </ul> |
-| **databricks.spark.executormetrics.directpoolmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.jvmheapmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.jvmoffheapmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.majorgccount** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.majorgctime** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.mappedpoolmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.minorgccount** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.minorgctime** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.offheapexecutionmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.offheapstoragememory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.offheapunifiedmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.onheapexecutionmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.onheapstoragememory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.onheapunifiedmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.processtreejvmrssmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.processtreejvmvmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.processtreeotherrssmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.processtreeothervmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.processtreepythonrssmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.executormetrics.processtreepythonvmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.hiveexternalcatalog.filecachehits** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.hiveexternalcatalog.filesdiscovered** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.hiveexternalcatalog.hiveclientcalls** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.hiveexternalcatalog.parallellistingjobcount** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.hiveexternalcatalog.partitionsfetched** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
+| **databricks.spark.executormetrics.directpoolmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.jvmheapmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.jvmoffheapmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.majorgccount** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.majorgctime** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.mappedpoolmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.minorgccount** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.minorgctime** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.offheapexecutionmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.offheapstoragememory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.offheapunifiedmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.onheapexecutionmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.onheapstoragememory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.onheapunifiedmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.processtreejvmrssmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.processtreejvmvmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.processtreeotherrssmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.processtreeothervmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.processtreepythonrssmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.executormetrics.processtreepythonvmemory** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.hiveexternalcatalog.filecachehits** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.hiveexternalcatalog.filesdiscovered** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.hiveexternalcatalog.hiveclientcalls** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.hiveexternalcatalog.parallellistingjobcount** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.hiveexternalcatalog.partitionsfetched** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
 | **databricks.spark.job.num_active_stages** | n/a | {stages} | Gauge(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>spark_job_id</li> </ul> |
 | **databricks.spark.job.num_active_tasks** | n/a | {tasks} | Gauge(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>spark_job_id</li> </ul> |
 | **databricks.spark.job.num_completed_stages** | n/a | {stages} | Gauge(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>spark_job_id</li> </ul> |
@@ -102,17 +102,17 @@ These are the metrics available for this scraper.
 | **databricks.spark.job.num_skipped_stages** | n/a | {stages} | Gauge(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>spark_job_id</li> </ul> |
 | **databricks.spark.job.num_skipped_tasks** | n/a | {tasks} | Gauge(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>spark_job_id</li> </ul> |
 | **databricks.spark.job.num_tasks** | n/a | {tasks} | Gauge(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>spark_job_id</li> </ul> |
-| **databricks.spark.jvmcpu.jvmcputime** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.livelistenerbus.numeventsposted** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.livelistenerbus.queue.appstatus.numdroppedevents** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.livelistenerbus.queue.appstatus.size** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.livelistenerbus.queue.executormanagement.numdroppedevents** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.livelistenerbus.queue.executormanagement.size** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.livelistenerbus.queue.shared.numdroppedevents** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.livelistenerbus.queue.shared.size** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.livelistenerbus.queue.streams.numdroppedevents** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.livelistenerbus.queue.streams.size** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
-| **databricks.spark.sparksqloperationmanager.numhiveoperations** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> </ul> |
+| **databricks.spark.jvmcpu.jvmcputime** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.livelistenerbus.numeventsposted** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.livelistenerbus.queue.appstatus.numdroppedevents** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.livelistenerbus.queue.appstatus.size** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.livelistenerbus.queue.executormanagement.numdroppedevents** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.livelistenerbus.queue.executormanagement.size** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.livelistenerbus.queue.shared.numdroppedevents** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.livelistenerbus.queue.shared.size** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.livelistenerbus.queue.streams.numdroppedevents** | n/a |  | Sum(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.livelistenerbus.queue.streams.size** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
+| **databricks.spark.sparksqloperationmanager.numhiveoperations** | n/a |  | Gauge(Double) | <ul> <li>cluster_id</li> <li>app_id</li> <li>pipeline_id</li> <li>pipeline_name</li> </ul> |
 | **databricks.spark.stage.disk_bytes_spilled** | n/a | By | Gauge(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>spark_job_id</li> </ul> |
 | **databricks.spark.stage.executor_run_time** | n/a |  | Gauge(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>spark_job_id</li> </ul> |
 | **databricks.spark.stage.input_bytes** | n/a |  | Gauge(Int) | <ul> <li>cluster_id</li> <li>app_id</li> <li>spark_job_id</li> </ul> |
@@ -168,6 +168,8 @@ metrics:
 | cluster_id | n/a |  |
 | executor_id | n/a |  |
 | job_id | The numeric ID of the Databricks job |  |
+| pipeline_id | n/a |  |
+| pipeline_name | n/a |  |
 | spark_job_id | n/a |  |
 | task_id | The name of the Databricks task |  |
 | task_type | The type of the Databricks task | NotebookTask, SparkJarTask, SparkPythonTask, PipelineTask, PythonWheelTask, SparkSubmitTask |

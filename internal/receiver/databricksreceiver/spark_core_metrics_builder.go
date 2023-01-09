@@ -46,7 +46,7 @@ func (b sparkClusterMetricsBuilder) buildMetrics(builder *metadata.MetricsBuilde
 		if pipeline != nil {
 			fmt.Printf("found pipeline %s for cluster id!\n", pipeline)
 		}
-		b.buildMetricsForCluster(builder, clusterMetric, now, clstr.ClusterId)
+		b.buildMetricsForCluster(builder, clusterMetric, now, clstr.ClusterId, pipeline)
 		b.buildClusterTimers(builder, clusterMetric, now, clstr.ClusterName)
 		otelHistos := b.sparkClusterHistosToOtelHistos(clusterMetric, now, clstr.ClusterId)
 		histoMetrics = append(histoMetrics, otelHistos...)
@@ -59,7 +59,14 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 	m spark.ClusterMetrics,
 	now pcommon.Timestamp,
 	clusterID string,
+	pipeline *pipelineSummary,
 ) {
+	pipelineID := ""
+	pipelineName := ""
+	if pipeline != nil {
+		pipelineID = pipeline.id
+		pipelineName = pipeline.name
+	}
 	for key, gauge := range m.Gauges {
 		appID, stripped := stripSparkMetricKey(key)
 		switch stripped {
@@ -69,6 +76,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "blockmanager.memory.maxmem":
 			builder.RecordDatabricksSparkBlockmanagerMemoryMaxmemDataPoint(
@@ -76,6 +85,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "blockmanager.memory.maxoffheapmem":
 			builder.RecordDatabricksSparkBlockmanagerMemoryMaxoffheapmemDataPoint(
@@ -83,6 +94,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "blockmanager.memory.maxonheapmem":
 			builder.RecordDatabricksSparkBlockmanagerMemoryMaxonheapmemDataPoint(
@@ -90,6 +103,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "blockmanager.memory.memused":
 			builder.RecordDatabricksSparkBlockmanagerMemoryMemusedDataPoint(
@@ -97,6 +112,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "blockmanager.memory.offheapmemused":
 			builder.RecordDatabricksSparkBlockmanagerMemoryOffheapmemusedDataPoint(
@@ -104,6 +121,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "blockmanager.memory.onheapmemused":
 			builder.RecordDatabricksSparkBlockmanagerMemoryOnheapmemusedDataPoint(
@@ -111,6 +130,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "blockmanager.memory.remainingmem":
 			builder.RecordDatabricksSparkBlockmanagerMemoryRemainingmemDataPoint(
@@ -118,6 +139,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "blockmanager.memory.remainingoffheapmem":
 			builder.RecordDatabricksSparkBlockmanagerMemoryRemainingoffheapmemDataPoint(
@@ -125,6 +148,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "blockmanager.memory.remainingonheapmem":
 			builder.RecordDatabricksSparkBlockmanagerMemoryRemainingonheapmemDataPoint(
@@ -132,6 +157,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "dagscheduler.job.activejobs":
 			builder.RecordDatabricksSparkDagschedulerJobActivejobsDataPoint(
@@ -139,6 +166,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "dagscheduler.job.alljobs":
 			builder.RecordDatabricksSparkDagschedulerJobAlljobsDataPoint(
@@ -146,6 +175,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "dagscheduler.stage.failedstages":
 			builder.RecordDatabricksSparkDagschedulerStageFailedstagesDataPoint(
@@ -153,6 +184,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "dagscheduler.stage.runningstages":
 			builder.RecordDatabricksSparkDagschedulerStageRunningstagesDataPoint(
@@ -160,6 +193,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "dagscheduler.stage.waitingstages":
 			builder.RecordDatabricksSparkDagschedulerStageWaitingstagesDataPoint(
@@ -167,6 +202,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.directpoolmemory":
 			builder.RecordDatabricksSparkExecutormetricsDirectpoolmemoryDataPoint(
@@ -174,6 +211,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.jvmheapmemory":
 			builder.RecordDatabricksSparkExecutormetricsJvmheapmemoryDataPoint(
@@ -181,6 +220,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.jvmoffheapmemory":
 			builder.RecordDatabricksSparkExecutormetricsJvmoffheapmemoryDataPoint(
@@ -188,6 +229,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.majorgccount":
 			builder.RecordDatabricksSparkExecutormetricsMajorgccountDataPoint(
@@ -195,6 +238,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.majorgctime":
 			builder.RecordDatabricksSparkExecutormetricsMajorgctimeDataPoint(
@@ -202,6 +247,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.mappedpoolmemory":
 			builder.RecordDatabricksSparkExecutormetricsMappedpoolmemoryDataPoint(
@@ -209,6 +256,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.minorgccount":
 			builder.RecordDatabricksSparkExecutormetricsMinorgccountDataPoint(
@@ -216,6 +265,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.minorgctime":
 			builder.RecordDatabricksSparkExecutormetricsMinorgctimeDataPoint(
@@ -223,6 +274,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.offheapexecutionmemory":
 			builder.RecordDatabricksSparkExecutormetricsOffheapexecutionmemoryDataPoint(
@@ -230,6 +283,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.offheapstoragememory":
 			builder.RecordDatabricksSparkExecutormetricsOffheapstoragememoryDataPoint(
@@ -237,6 +292,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.offheapunifiedmemory":
 			builder.RecordDatabricksSparkExecutormetricsOffheapunifiedmemoryDataPoint(
@@ -244,6 +301,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.onheapexecutionmemory":
 			builder.RecordDatabricksSparkExecutormetricsOnheapexecutionmemoryDataPoint(
@@ -251,6 +310,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.onheapstoragememory":
 			builder.RecordDatabricksSparkExecutormetricsOnheapstoragememoryDataPoint(
@@ -258,6 +319,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.onheapunifiedmemory":
 			builder.RecordDatabricksSparkExecutormetricsOnheapunifiedmemoryDataPoint(
@@ -265,6 +328,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.processtreejvmrssmemory":
 			builder.RecordDatabricksSparkExecutormetricsProcesstreejvmrssmemoryDataPoint(
@@ -272,6 +337,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.processtreejvmvmemory":
 			builder.RecordDatabricksSparkExecutormetricsProcesstreejvmvmemoryDataPoint(
@@ -279,6 +346,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.processtreeotherrssmemory":
 			builder.RecordDatabricksSparkExecutormetricsProcesstreeotherrssmemoryDataPoint(
@@ -286,6 +355,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.processtreeothervmemory":
 			builder.RecordDatabricksSparkExecutormetricsProcesstreeothervmemoryDataPoint(
@@ -293,6 +364,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.processtreepythonrssmemory":
 			builder.RecordDatabricksSparkExecutormetricsProcesstreepythonrssmemoryDataPoint(
@@ -300,6 +373,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "executormetrics.processtreepythonvmemory":
 			builder.RecordDatabricksSparkExecutormetricsProcesstreepythonvmemoryDataPoint(
@@ -307,6 +382,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "jvmcpu.jvmcputime":
 			builder.RecordDatabricksSparkJvmcpuJvmcputimeDataPoint(
@@ -314,6 +391,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "livelistenerbus.queue.appstatus.size":
 			builder.RecordDatabricksSparkLivelistenerbusQueueAppstatusSizeDataPoint(
@@ -321,6 +400,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "livelistenerbus.queue.executormanagement.size":
 			builder.RecordDatabricksSparkLivelistenerbusQueueExecutormanagementSizeDataPoint(
@@ -328,6 +409,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "livelistenerbus.queue.shared.size":
 			builder.RecordDatabricksSparkLivelistenerbusQueueSharedSizeDataPoint(
@@ -335,6 +418,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "livelistenerbus.queue.streams.size":
 			builder.RecordDatabricksSparkLivelistenerbusQueueStreamsSizeDataPoint(
@@ -342,6 +427,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "sparksqloperationmanager.numhiveoperations":
 			builder.RecordDatabricksSparkSparksqloperationmanagerNumhiveoperationsDataPoint(
@@ -349,6 +436,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				gauge.Value,
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		}
 	}
@@ -361,6 +450,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.directorycommit.deletedfilesfiltered":
 			builder.RecordDatabricksSparkDatabricksDirectorycommitDeletedfilesfilteredDataPoint(
@@ -368,6 +459,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.directorycommit.filterlistingcount":
 			builder.RecordDatabricksSparkDatabricksDirectorycommitFilterlistingcountDataPoint(
@@ -375,6 +468,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.directorycommit.jobcommitcompleted":
 			builder.RecordDatabricksSparkDatabricksDirectorycommitJobcommitcompletedDataPoint(
@@ -382,6 +477,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.directorycommit.markerreaderrors":
 			builder.RecordDatabricksSparkDatabricksDirectorycommitMarkerreaderrorsDataPoint(
@@ -389,6 +486,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.directorycommit.markerrefreshcount":
 			builder.RecordDatabricksSparkDatabricksDirectorycommitMarkerrefreshcountDataPoint(
@@ -396,6 +495,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.directorycommit.markerrefresherrors":
 			builder.RecordDatabricksSparkDatabricksDirectorycommitMarkerrefresherrorsDataPoint(
@@ -403,6 +504,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.directorycommit.markersread":
 			builder.RecordDatabricksSparkDatabricksDirectorycommitMarkersreadDataPoint(
@@ -410,6 +513,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.directorycommit.repeatedlistcount":
 			builder.RecordDatabricksSparkDatabricksDirectorycommitRepeatedlistcountDataPoint(
@@ -417,6 +522,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.directorycommit.uncommittedfilesfiltered":
 			builder.RecordDatabricksSparkDatabricksDirectorycommitUncommittedfilesfilteredDataPoint(
@@ -424,6 +531,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.directorycommit.untrackedfilesfound":
 			builder.RecordDatabricksSparkDatabricksDirectorycommitUntrackedfilesfoundDataPoint(
@@ -431,6 +540,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.directorycommit.vacuumcount":
 			builder.RecordDatabricksSparkDatabricksDirectorycommitVacuumcountDataPoint(
@@ -438,6 +549,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.directorycommit.vacuumerrors":
 			builder.RecordDatabricksSparkDatabricksDirectorycommitVacuumerrorsDataPoint(
@@ -445,6 +558,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.preemption.numchecks":
 			builder.RecordDatabricksSparkDatabricksPreemptionNumchecksDataPoint(
@@ -452,6 +567,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.preemption.numpoolsautoexpired":
 			builder.RecordDatabricksSparkDatabricksPreemptionNumpoolsautoexpiredDataPoint(
@@ -459,6 +576,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.preemption.numtaskspreempted":
 			builder.RecordDatabricksSparkDatabricksPreemptionNumtaskspreemptedDataPoint(
@@ -466,6 +585,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.preemption.poolstarvationmillis":
 			builder.RecordDatabricksSparkDatabricksPreemptionPoolstarvationmillisDataPoint(
@@ -473,6 +594,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.preemption.scheduleroverheadnanos":
 			builder.RecordDatabricksSparkDatabricksPreemptionScheduleroverheadnanosDataPoint(
@@ -480,6 +603,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.preemption.tasktimewastedmillis":
 			builder.RecordDatabricksSparkDatabricksPreemptionTasktimewastedmillisDataPoint(
@@ -487,6 +612,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.activepools":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesActivepoolsDataPoint(
@@ -494,6 +621,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.bypasslaneactivepools":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesBypasslaneactivepoolsDataPoint(
@@ -501,6 +630,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.fastlaneactivepools":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesFastlaneactivepoolsDataPoint(
@@ -508,6 +639,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.finishedqueriestotaltasktimens":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesFinishedqueriestotaltasktimensDataPoint(
@@ -515,6 +648,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.lanecleanup.markedpools":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesLanecleanupMarkedpoolsDataPoint(
@@ -522,6 +657,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.lanecleanup.twophasepoolscleaned":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesLanecleanupTwophasepoolscleanedDataPoint(
@@ -529,6 +666,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.lanecleanup.zombiepoolscleaned":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesLanecleanupZombiepoolscleanedDataPoint(
@@ -536,6 +675,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.preemption.slottransfernumsuccessfulpreemptioniterations":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesPreemptionSlottransfernumsuccessfulpreemptioniterationsDataPoint(
@@ -543,6 +684,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.preemption.slottransfernumtaskspreempted":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesPreemptionSlottransfernumtaskspreemptedDataPoint(
@@ -550,6 +693,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.preemption.slottransferwastedtasktimens":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesPreemptionSlottransferwastedtasktimensDataPoint(
@@ -557,6 +702,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.slotreservation.numgradualdecrease":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesSlotreservationNumgradualdecreaseDataPoint(
@@ -564,6 +711,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.slotreservation.numquickdrop":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesSlotreservationNumquickdropDataPoint(
@@ -571,6 +720,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.slotreservation.numquickjump":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesSlotreservationNumquickjumpDataPoint(
@@ -578,6 +729,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.slotreservation.slotsreserved":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesSlotreservationSlotsreservedDataPoint(
@@ -585,6 +738,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.slowlaneactivepools":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesSlowlaneactivepoolsDataPoint(
@@ -592,6 +747,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "databricks.taskschedulinglanes.totalquerygroupsfinished":
 			builder.RecordDatabricksSparkDatabricksTaskschedulinglanesTotalquerygroupsfinishedDataPoint(
@@ -599,6 +756,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "hiveexternalcatalog.filecachehits":
 			builder.RecordDatabricksSparkHiveexternalcatalogFilecachehitsDataPoint(
@@ -606,6 +765,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "hiveexternalcatalog.filesdiscovered":
 			builder.RecordDatabricksSparkHiveexternalcatalogFilesdiscoveredDataPoint(
@@ -613,6 +774,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "hiveexternalcatalog.hiveclientcalls":
 			builder.RecordDatabricksSparkHiveexternalcatalogHiveclientcallsDataPoint(
@@ -620,6 +783,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "hiveexternalcatalog.parallellistingjobcount":
 			builder.RecordDatabricksSparkHiveexternalcatalogParallellistingjobcountDataPoint(
@@ -627,6 +792,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "hiveexternalcatalog.partitionsfetched":
 			builder.RecordDatabricksSparkHiveexternalcatalogPartitionsfetchedDataPoint(
@@ -634,6 +801,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "livelistenerbus.numeventsposted":
 			builder.RecordDatabricksSparkLivelistenerbusNumeventspostedDataPoint(
@@ -641,6 +810,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "livelistenerbus.queue.appstatus.numdroppedevents":
 			builder.RecordDatabricksSparkLivelistenerbusQueueAppstatusNumdroppedeventsDataPoint(
@@ -648,6 +819,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "livelistenerbus.queue.executormanagement.numdroppedevents":
 			builder.RecordDatabricksSparkLivelistenerbusQueueExecutormanagementNumdroppedeventsDataPoint(
@@ -655,6 +828,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "livelistenerbus.queue.shared.numdroppedevents":
 			builder.RecordDatabricksSparkLivelistenerbusQueueSharedNumdroppedeventsDataPoint(
@@ -662,6 +837,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		case "livelistenerbus.queue.streams.numdroppedevents":
 			builder.RecordDatabricksSparkLivelistenerbusQueueStreamsNumdroppedeventsDataPoint(
@@ -669,6 +846,8 @@ func (b sparkClusterMetricsBuilder) buildMetricsForCluster(
 				int64(counter.Count),
 				clusterID,
 				appID,
+				pipelineID,
+				pipelineName,
 			)
 		}
 	}
