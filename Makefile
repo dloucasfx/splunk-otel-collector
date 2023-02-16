@@ -131,19 +131,23 @@ install-tools:
 .PHONY: otelcol
 otelcol:
 	go generate ./...
-	GO111MODULE=on CGO_ENABLED=0 go build -trimpath -o ./bin/otelcol_$(GOOS)_$(GOARCH)$(EXTENSION) $(BUILD_INFO) ./cmd/otelcol
+ifneq ($(REMOTE_DEBUG), true)
+	GO111MODULE=on CGO_ENABLED=0 go build -o ./bin/otelcol_$(GOOS)_$(GOARCH)$(EXTENSION) $(BUILD_INFO) ./cmd/otelcol
+else
+	GO111MODULE=on CGO_ENABLED=0 go build -gcflags="all=-N -l" -o ./bin/otelcol_$(GOOS)_$(GOARCH)$(EXTENSION) $(BUILD_INFO) ./cmd/otelcol
+endif
 	ln -sf otelcol_$(GOOS)_$(GOARCH)$(EXTENSION) ./bin/otelcol
 
 .PHONY: translatesfx
 translatesfx:
 	go generate ./...
-	GO111MODULE=on CGO_ENABLED=0 go build -trimpath -o ./bin/translatesfx_$(GOOS)_$(GOARCH)$(EXTENSION) $(BUILD_INFO) ./cmd/translatesfx
+	GO111MODULE=on CGO_ENABLED=0 go build -o ./bin/translatesfx_$(GOOS)_$(GOARCH)$(EXTENSION) $(BUILD_INFO) ./cmd/translatesfx
 	ln -sf translatesfx_$(GOOS)_$(GOARCH)$(EXTENSION) ./bin/translatesfx
 
 .PHONY: migratecheckpoint
 migratecheckpoint:
 	go generate ./...
-	GO111MODULE=on CGO_ENABLED=0 go build -trimpath -o ./bin/migratecheckpoint_$(GOOS)_$(GOARCH)$(EXTENSION) $(BUILD_INFO) ./cmd/migratecheckpoint
+	GO111MODULE=on CGO_ENABLED=0 go build -o ./bin/migratecheckpoint_$(GOOS)_$(GOARCH)$(EXTENSION) $(BUILD_INFO) ./cmd/migratecheckpoint
 	ln -sf migratecheckpoint_$(GOOS)_$(GOARCH)$(EXTENSION) ./bin/migratecheckpoint
 
 .PHONY: add-tag
@@ -167,7 +171,11 @@ endif
 	cp ./bin/translatesfx_linux_$(ARCH) ./cmd/otelcol/translatesfx
 	cp ./bin/migratecheckpoint_linux_$(ARCH) ./cmd/otelcol/migratecheckpoint
 	cp ./internal/buildscripts/packaging/collect-libs.sh ./cmd/otelcol/collect-libs.sh
+ifneq ($(REMOTE_DEBUG), true)
 	docker buildx build --platform linux/$(ARCH) -o type=image,name=otelcol:$(ARCH),push=false --build-arg ARCH=$(ARCH) --build-arg SMART_AGENT_RELEASE=$(SMART_AGENT_RELEASE) --build-arg DOCKER_REPO=$(DOCKER_REPO) ./cmd/otelcol/
+else
+	docker buildx build -f ./cmd/otelcol/Dockerfile.RemoteDebug --platform linux/$(ARCH) -o type=image,name=otelcol:$(ARCH),push=false --build-arg ARCH=$(ARCH) --build-arg SMART_AGENT_RELEASE=$(SMART_AGENT_RELEASE) --build-arg DOCKER_REPO=$(DOCKER_REPO) ./cmd/otelcol/
+endif
 	docker tag otelcol:$(ARCH) otelcol:latest
 	rm ./cmd/otelcol/otelcol
 	rm ./cmd/otelcol/translatesfx
