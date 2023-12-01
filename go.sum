@@ -1118,8 +1118,6 @@ github.com/open-telemetry/opentelemetry-collector-contrib/exporter/pulsarexporte
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/pulsarexporter v0.86.0/go.mod h1:XgmIjwM6hTQvyzm6ClJLMtr6eubx1DmRqil9NDj2NiU=
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/sapmexporter v0.86.0 h1:K7eu4hTp5LVhJROR34vjWFNiThSa6wgb4eZryBH3hsY=
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/sapmexporter v0.86.0/go.mod h1:67Z4qrkVOem4TfOijxTlioJ4ZJewnJkg1RhTZ72b6x4=
-github.com/open-telemetry/opentelemetry-collector-contrib/exporter/signalfxexporter v0.86.0 h1:LjDMbehWLH+t6fkp6uQdpiu9sc3XgyG9Wjve4qV+wOU=
-github.com/open-telemetry/opentelemetry-collector-contrib/exporter/signalfxexporter v0.86.0/go.mod h1:SChDEn3vnLkeorh+Yx3FKmfFurWnFdsjHeUa6tuKkAA=
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.86.0 h1:xqoxs6rG6G+klvzEyeEo0T35V0GFC900zJANj8sFJjM=
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.86.0/go.mod h1:IfchAtrAQSOP254Vi3i8S2dA+nHTh1CnDafiy4k4Lik=
 github.com/open-telemetry/opentelemetry-collector-contrib/extension/basicauthextension v0.86.0 h1:fefJjwcQbeFuNFVvilMJB0U4Sbpg5pG/NjuN1JEeg6A=
@@ -1614,8 +1612,6 @@ go.opentelemetry.io/collector/config/configcompression v0.86.0 h1:qA7i0igeYEpOW4
 go.opentelemetry.io/collector/config/configcompression v0.86.0/go.mod h1:LaavoxZsro5lL7qh1g9DMifG0qixWPEecW18Qr8bpag=
 go.opentelemetry.io/collector/config/configgrpc v0.86.0 h1:M1fq3QAGy+Q8bheiT1YWUpCcVEBnhWttHU1l8oXBQWg=
 go.opentelemetry.io/collector/config/configgrpc v0.86.0/go.mod h1:PR4Ydn5RylPs06TEQRx6ygBdcOPYR9pni7XKoat8EYM=
-go.opentelemetry.io/collector/config/confighttp v0.86.0 h1:DLHWhUG3Xp9Gci6+ewJ21GwIV0RQd8jlNt3F36397uk=
-go.opentelemetry.io/collector/config/confighttp v0.86.0/go.mod h1:FMCmz/9rg8AXxdltWKUbFxOGQ/g9rNvTfb4EUA+RjT4=
 go.opentelemetry.io/collector/config/confignet v0.86.0 h1:jg8rsMsAGKa+x3gs1yxqnfr2jpSAu8mGn7hc4y8h71o=
 go.opentelemetry.io/collector/config/confignet v0.86.0/go.mod h1:cpO8JYWGONaViOygKVw+Hd2UoBcn2cUiyi0WWeFTwJY=
 go.opentelemetry.io/collector/config/configopaque v0.86.0 h1:usNMgdFXbmprEcTImwVtziGkhXHeC/aWE93n2ZXlIO8=
