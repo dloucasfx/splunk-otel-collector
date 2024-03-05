@@ -2,6 +2,8 @@ module github.com/signalfx/splunk-otel-collector
 
 go 1.20
 
+replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/signalfxexporter => github.com/dloucasfx/opentelemetry-collector-contrib/exporter/signalfxexporter v0.56.1-0.20240304225544-6482381adecb
+
 require (
 	github.com/alecthomas/participle/v2 v2.1.1
 	github.com/antonmedv/expr v1.15.5

@@ -340,6 +340,8 @@ github.com/digitalocean/godo v1.104.1/go.mod h1:VAI/L5YDzMuPRU01lEEUSQ/sp5Z//1Hn
 github.com/dimchansky/utfbom v1.1.1 h1:vV6w1AhK4VMnhBno/TPVCoK9U/LP0PkLCS9tbxHdi/U=
 github.com/dimfeld/httptreemux v5.0.1+incompatible h1:Qj3gVcDNoOthBAqftuD596rm4wg/adLLz5xh5CmpiCA=
 github.com/dimfeld/httptreemux v5.0.1+incompatible/go.mod h1:rbUlSV+CCpv/SuqUTP/8Bk2O3LyUV436/yaRGkhP6Z0=
+github.com/dloucasfx/opentelemetry-collector-contrib/exporter/signalfxexporter v0.56.1-0.20240304225544-6482381adecb h1:hhqpnHqj7zcy+60Cg9OmkOaso+kYP6NZGrx7gQOJPrw=
+github.com/dloucasfx/opentelemetry-collector-contrib/exporter/signalfxexporter v0.56.1-0.20240304225544-6482381adecb/go.mod h1:6a8XH0ypQjTUwXErNVCQFVwEu2XM3GFhfOkQO9tGYj8=
 github.com/dnaeon/go-vcr v1.2.0 h1:zHCHvJYTMh1N7xnV7zf1m1GPBF9Ad0Jk/whtQ1663qI=
 github.com/dnaeon/go-vcr v1.2.0/go.mod h1:R4UdLID7HZT3taECzJs4YgbbH6PIGXB6W/sc5OLb6RQ=
 github.com/docker/distribution v2.8.2+incompatible h1:T3de5rq0dB1j30rp0sA2rER+m322EBzniBPB6ZIzuh8=
@@ -1077,8 +1079,6 @@ github.com/open-telemetry/opentelemetry-collector-contrib/exporter/pulsarexporte
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/pulsarexporter v0.91.0/go.mod h1:3MfiuC2mpiCksPXLIzWRz+AKX/3csxXg5CZ+vi1/FGg=
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/sapmexporter v0.91.0 h1:i2rTiyEobMD3hQcic2QSUd3SO3IAuZ5C8QKh32oWLTI=
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/sapmexporter v0.91.0/go.mod h1:K5bLmhHIwra7fsDWWA4kt+DNZ+ZHzlhuURC1dldlu7U=
-github.com/open-telemetry/opentelemetry-collector-contrib/exporter/signalfxexporter v0.91.0 h1:JAT8jtaupNOqJXqQ2p/8QWUEzutcUL3zlMVDBIKt6Ug=
-github.com/open-telemetry/opentelemetry-collector-contrib/exporter/signalfxexporter v0.91.0/go.mod h1:6a8XH0ypQjTUwXErNVCQFVwEu2XM3GFhfOkQO9tGYj8=
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.91.0 h1:liCglJOfU1ZRPziihKXesJkckI2M9wJiT9j7DTQRNfM=
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.91.0/go.mod h1:2vR5srhaUPmLTpvsWQAq6Opd983Tq4ngUPfK7qVzcGE=
 github.com/open-telemetry/opentelemetry-collector-contrib/extension/basicauthextension v0.91.0 h1:4AP+MIp4So1D2XeoEaLryFZuNMn4dWUx43zEFXNSkkk=
